@@ -1,0 +1,2015 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEN English Learning Studio - Unit 1 & Super Mario Game</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- OpenDyslexic and Inter Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Fredoka', 'Inter', 'sans-serif'],
+                        dyslexic: ['Comic Sans MS', 'Fredoka', 'sans-serif']
+                    },
+                    colors: {
+                        marioRed: '#E52521',
+                        marioBlue: '#0028C8',
+                        marioYellow: '#FBD000',
+                        marioGreen: '#43B047'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .dyslexia-font {
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Fredoka', sans-serif !important;
+            letter-spacing: 0.05em;
+            word-spacing: 0.15em;
+        }
+
+        .high-contrast {
+            background-color: #000000 !important;
+            color: #FFFF00 !important;
+        }
+        .high-contrast .bg-card {
+            background-color: #111111 !important;
+            border-color: #FFFF00 !important;
+        }
+        .high-contrast button {
+            border: 2px solid #FFFF00 !important;
+        }
+
+        /* Large Focus Ring for Accessibility */
+        *:focus-visible {
+            outline: 4px solid #FBD000 !important;
+            outline-offset: 3px !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+            height: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 6px;
+        }
+
+        /* Pulsing & Floating Animations */
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(251, 208, 0, 0.6)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 25px rgba(251, 208, 0, 0.9)); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-glow 2s infinite;
+        }
+
+        /* Game Canvas Container */
+        #gameCanvas {
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            touch-action: none;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-300 select-none">
+
+    <!-- TOP ACCESSIBILITY & NAVIGATION BAR -->
+    <header class="bg-slate-800 border-b-4 border-yellow-400 p-3 sm:p-4 sticky top-0 z-50 shadow-xl">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+            
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-red-600 rounded-2xl flex items-center justify-center text-white text-2xl font-black shadow-lg border-2 border-yellow-300">
+                    👚
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-black tracking-wide text-yellow-300 drop-shadow">
+                        SEN English Studio
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-300 font-semibold">Unit 1: Working in Clothes Shops</p>
+                </div>
+            </div>
+
+            <!-- Accessibility Controls -->
+            <div class="flex items-center flex-wrap gap-2">
+                <!-- TTS Voice Speed Toggle -->
+                <div class="bg-slate-700/80 rounded-xl p-1.5 flex items-center space-x-1 border border-slate-600">
+                    <span class="text-xs font-bold text-slate-300 pl-1"><i class="fa-solid fa-gauge-high mr-1 text-cyan-400"></i>Speed:</span>
+                    <button onclick="setTTSSpeed(0.6)" id="btnSpeed06" class="px-2 py-1 text-xs rounded-lg font-bold bg-slate-600 hover:bg-slate-500">0.6x</button>
+                    <button onclick="setTTSSpeed(0.85)" id="btnSpeed085" class="px-2 py-1 text-xs rounded-lg font-bold bg-blue-600 text-white">0.85x</button>
+                    <button onclick="setTTSSpeed(1.0)" id="btnSpeed10" class="px-2 py-1 text-xs rounded-lg font-bold bg-slate-600 hover:bg-slate-500">1.0x</button>
+                </div>
+
+                <!-- Font Size & Font Style Toggles -->
+                <button onclick="toggleDyslexiaFont()" id="dyslexiaBtn" class="px-3 py-1.5 bg-purple-700 hover:bg-purple-600 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center shadow transition active:scale-95">
+                    <i class="fa-solid fa-font mr-1.5"></i> Dyslexia Font
+                </button>
+
+                <button onclick="toggleHighContrast()" id="contrastBtn" class="px-3 py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 rounded-xl text-xs sm:text-sm font-black flex items-center shadow transition active:scale-95">
+                    <i class="fa-solid fa-circle-half-stroke mr-1.5"></i> High Contrast
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation Bar -->
+        <nav class="max-w-7xl mx-auto mt-3 flex flex-wrap gap-2 justify-center sm:justify-start border-t border-slate-700 pt-3">
+            <button onclick="switchTab('slides')" id="tab-slides" class="nav-tab active flex items-center space-x-2 px-4 py-2.5 rounded-xl font-black text-sm sm:text-base bg-yellow-400 text-slate-950 shadow-lg border-2 border-yellow-200">
+                <i class="fa-solid fa-book-open text-lg"></i>
+                <span>1. Grammar Slides</span>
+            </button>
+            
+            <button onclick="switchTab('fill1')" id="tab-fill1" class="nav-tab flex items-center space-x-2 px-4 py-2.5 rounded-xl font-black text-sm sm:text-base bg-slate-700 hover:bg-slate-600 text-white border-2 border-transparent">
+                <i class="fa-solid fa-font text-lg text-blue-400"></i>
+                <span>2. Capital Letters</span>
+            </button>
+
+            <button onclick="switchTab('fill2')" id="tab-fill2" class="nav-tab flex items-center space-x-2 px-4 py-2.5 rounded-xl font-black text-sm sm:text-base bg-slate-700 hover:bg-slate-600 text-white border-2 border-transparent">
+                <i class="fa-solid fa-question text-lg text-pink-400"></i>
+                <span>3. Punctuation (. / ?)</span>
+            </button>
+
+            <button onclick="switchTab('fill3')" id="tab-fill3" class="nav-tab flex items-center space-x-2 px-4 py-2.5 rounded-xl font-black text-sm sm:text-base bg-slate-700 hover:bg-slate-600 text-white border-2 border-transparent">
+                <i class="fa-solid fa-list-check text-lg text-emerald-400"></i>
+                <span>4. Mixed Sentences</span>
+            </button>
+
+            <button onclick="switchTab('mario')" id="tab-mario" class="nav-tab flex items-center space-x-2 px-4 py-2.5 rounded-xl font-black text-sm sm:text-base bg-red-600 hover:bg-red-500 text-white border-2 border-red-400 animate-pulse">
+                <i class="fa-solid fa-gamepad text-lg text-yellow-300"></i>
+                <span>5. Super Mario Game 🔥</span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-3 sm:p-6 flex flex-col justify-start">
+
+        <!-- ================================================================= -->
+        <!-- MODULE 1: GRAMMAR SLIDES (ENLARGED EXTRA LARGE FONTS FOR SEN)     -->
+        <!-- ================================================================= -->
+        <section id="mod-slides" class="tab-content flex flex-col h-full">
+            <div class="bg-slate-800/90 rounded-3xl p-6 sm:p-10 border-4 border-slate-700 shadow-2xl flex-grow flex flex-col justify-between">
+                
+                <!-- Slide Header Controls -->
+                <div class="flex flex-wrap items-center justify-between gap-4 border-b-2 border-slate-700 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <span id="slideBadge" class="px-4 py-1.5 bg-yellow-400 text-slate-950 text-lg font-black rounded-full shadow">
+                            Slide 1 of 4
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Grammar & Punctuation Rules</h2>
+                    </div>
+
+                    <!-- TTS Speaker Button -->
+                    <button onclick="readCurrentSlide()" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black rounded-2xl text-lg sm:text-xl flex items-center space-x-2 shadow-lg transition transform active:scale-95">
+                        <i class="fa-solid fa-volume-high text-2xl"></i>
+                        <span>Read Aloud</span>
+                    </button>
+                </div>
+
+                <!-- SLIDE CONTENT AREA WITH EXTRA-LARGE FONTS -->
+                <div id="slideViewport" class="my-6 min-h-[380px] flex flex-col justify-center">
+                    <!-- Slide content dynamically rendered via JavaScript -->
+                </div>
+
+                <!-- Slide Navigation Footer -->
+                <div class="flex items-center justify-between pt-4 border-t-2 border-slate-700 gap-4">
+                    <button onclick="prevSlide()" id="btnPrevSlide" class="px-6 py-3.5 bg-slate-700 hover:bg-slate-600 disabled:opacity-40 text-white font-black rounded-2xl text-lg sm:text-xl flex items-center space-x-2 shadow-md">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Previous Rule</span>
+                    </button>
+
+                    <!-- Dot Indicators -->
+                    <div class="flex items-center space-x-3" id="slideDots">
+                        <!-- Dots rendered by JS -->
+                    </div>
+
+                    <button onclick="nextSlide()" id="btnNextSlide" class="px-6 py-3.5 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black rounded-2xl text-lg sm:text-xl flex items-center space-x-2 shadow-md">
+                        <span>Next Rule</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- MODULE 2: FILL IN BLANKS (1) - CAPITALIZATION (ONE BY ONE)        -->
+        <!-- ================================================================= -->
+        <section id="mod-fill1" class="tab-content hidden">
+            <div class="bg-slate-800 rounded-3xl p-6 sm:p-8 border-4 border-blue-500/40 shadow-2xl">
+                <!-- Header with progress & score -->
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 border-b-2 border-slate-700 pb-4">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-blue-300 flex items-center gap-2">
+                            <i class="fa-solid fa-font"></i> Practice 1: Capital or Lowercase?
+                        </h2>
+                        <p class="text-slate-300 text-base font-semibold mt-1">Tap the correct letter option to complete each sentence!</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="fill1Progress" class="text-xl font-black text-yellow-300 bg-slate-900 px-4 py-2 rounded-2xl border-2 border-slate-700 shadow-inner">
+                            Question 1 of 10
+                        </span>
+                        <span id="fill1ScoreText" class="text-xl font-black text-emerald-400 bg-slate-900 px-4 py-2 rounded-2xl border-2 border-slate-700 shadow-inner">
+                            Score: 0
+                        </span>
+                        <button onclick="resetFill1Round()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-sm flex items-center space-x-1 shadow">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Restart</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interactive Single-Card Container -->
+                <div id="fill1CardArea" class="min-h-[300px] flex flex-col justify-between">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- MODULE 3: FILL IN BLANKS (2) - PUNCTUATION (ONE BY ONE)           -->
+        <!-- ================================================================= -->
+        <section id="mod-fill2" class="tab-content hidden">
+            <div class="bg-slate-800 rounded-3xl p-6 sm:p-8 border-4 border-pink-500/40 shadow-2xl">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 border-b-2 border-slate-700 pb-4">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-pink-300 flex items-center gap-2">
+                            <i class="fa-solid fa-question"></i> Practice 2: Full Stop (.) or Question Mark (?)
+                        </h2>
+                        <p class="text-slate-300 text-base font-semibold mt-1">Is it a telling statement <span class="text-red-400 font-bold">( . )</span> or an asking question <span class="text-yellow-300 font-bold">( ? )</span>?</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="fill2Progress" class="text-xl font-black text-yellow-300 bg-slate-900 px-4 py-2 rounded-2xl border-2 border-slate-700 shadow-inner">
+                            Question 1 of 10
+                        </span>
+                        <span id="fill2ScoreText" class="text-xl font-black text-emerald-400 bg-slate-900 px-4 py-2 rounded-2xl border-2 border-slate-700 shadow-inner">
+                            Score: 0
+                        </span>
+                        <button onclick="resetFill2Round()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-sm flex items-center space-x-1 shadow">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Restart</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="fill2CardArea" class="min-h-[300px] flex flex-col justify-between">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- MODULE 4: FILL IN BLANKS (3) - MIXED CHALLENGE (ONE BY ONE)       -->
+        <!-- ================================================================= -->
+        <section id="mod-fill3" class="tab-content hidden">
+            <div class="bg-slate-800 rounded-3xl p-6 sm:p-8 border-4 border-emerald-500/40 shadow-2xl">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 border-b-2 border-slate-700 pb-4">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-emerald-300 flex items-center gap-2">
+                            <i class="fa-solid fa-list-check"></i> Practice 3: Mixed Capital & Punctuation
+                        </h2>
+                        <p class="text-slate-300 text-base font-semibold mt-1">Select BOTH the correct starting letter and ending punctuation mark!</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="fill3Progress" class="text-xl font-black text-yellow-300 bg-slate-900 px-4 py-2 rounded-2xl border-2 border-slate-700 shadow-inner">
+                            Question 1 of 10
+                        </span>
+                        <span id="fill3ScoreText" class="text-xl font-black text-emerald-400 bg-slate-900 px-4 py-2 rounded-2xl border-2 border-slate-700 shadow-inner">
+                            Score: 0
+                        </span>
+                        <button onclick="resetFill3Round()" class="px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-bold text-sm flex items-center space-x-1 shadow">
+                            <i class="fa-solid fa-rotate-right"></i>
+                            <span>Restart</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="fill3CardArea" class="min-h-[300px] flex flex-col justify-between">
+                    <!-- Rendered by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================= -->
+        <!-- MODULE 5: SUPER MARIO GAME (SMOOTHENED & 10 LIVES)                -->
+        <!-- ================================================================= -->
+        <section id="mod-mario" class="tab-content hidden flex flex-col items-center">
+            
+            <!-- Game HUD / Top Control Bar -->
+            <div class="w-full max-w-4xl bg-slate-800 rounded-2xl p-4 mb-3 border-2 border-red-500/50 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+                <div class="flex items-center space-x-4 text-lg font-black">
+                    <span class="text-red-400 flex items-center"><i class="fa-solid fa-heart mr-1.5 text-xl"></i><span id="marioLives">10</span></span>
+                    <span class="text-yellow-400 flex items-center"><i class="fa-solid fa-coins mr-1.5 text-xl"></i><span id="marioCoins">0</span></span>
+                    <span class="text-cyan-400 flex items-center"><i class="fa-solid fa-fire mr-1.5 text-xl"></i><span id="marioFireState">Normal</span></span>
+                    <span class="text-white">Score: <span id="marioScore" class="text-yellow-300">0</span></span>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <select id="levelSelect" onchange="changeLevel(this.value)" class="bg-slate-900 border border-slate-600 text-yellow-300 font-bold py-1.5 px-3 rounded-xl text-sm focus:outline-none">
+                        <option value="1">World 1-1: Clothes Shop Meadow</option>
+                        <option value="2">World 1-2: Fitting Room Platform Caves</option>
+                        <option value="3">World 2-1: Castle Lair (Bowser Boss!)</option>
+                    </select>
+                    <button onclick="restartMarioGame()" class="px-3 py-1.5 bg-red-600 hover:bg-red-500 text-white font-bold text-sm rounded-xl flex items-center shadow">
+                        <i class="fa-solid fa-rotate mr-1"></i> Reset Game
+                    </button>
+                </div>
+            </div>
+
+            <!-- Game Canvas Frame -->
+            <div class="relative w-full max-w-4xl bg-slate-950 rounded-3xl overflow-hidden border-4 border-yellow-400 shadow-2xl">
+                
+                <canvas id="gameCanvas" width="800" height="440" class="w-full h-auto block bg-sky-400"></canvas>
+
+                <!-- Grammar Quiz Modal Overlay (Triggers on ? Blocks) -->
+                <div id="quizOverlay" class="absolute inset-0 bg-slate-950/90 backdrop-blur-md hidden flex-col items-center justify-center p-6 z-30">
+                    <div class="bg-slate-800 border-4 border-yellow-400 rounded-3xl p-6 max-w-lg w-full text-center shadow-2xl transform transition-all scale-100">
+                        <div class="text-yellow-400 text-4xl mb-2 font-black">
+                            <i class="fa-solid fa-circle-question animate-bounce"></i>
+                        </div>
+                        <h3 class="text-2xl font-black text-white mb-1">Super Question Block!</h3>
+                        <p class="text-slate-300 text-sm mb-4 font-bold">Answer correctly to get Fire Flower power & extra coins!</p>
+                        
+                        <!-- Question Text -->
+                        <div id="quizQuestionBox" class="bg-slate-900 p-4 rounded-2xl border-2 border-slate-700 text-xl font-bold text-yellow-200 mb-5 shadow-inner">
+                            <!-- Populated by JS -->
+                        </div>
+
+                        <!-- Answer Buttons -->
+                        <div id="quizOptionsBox" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Game Over / Victory Overlay -->
+                <div id="gameStatusOverlay" class="absolute inset-0 bg-slate-950/95 hidden flex-col items-center justify-center p-6 z-40">
+                    <h2 id="gameStatusTitle" class="text-4xl sm:text-5xl font-black text-yellow-400 mb-3 drop-shadow-lg">GAME OVER</h2>
+                    <p id="gameStatusDesc" class="text-xl text-slate-200 mb-6 font-bold text-center">Don't give up! Try again to master capitalization and punctuation!</p>
+                    <button onclick="restartMarioGame()" class="px-8 py-4 bg-red-600 hover:bg-red-500 text-white font-black text-2xl rounded-2xl shadow-xl transform transition hover:scale-105 active:scale-95">
+                        <i class="fa-solid fa-play mr-2"></i> Play Again
+                    </button>
+                </div>
+            </div>
+
+            <!-- Touch / Mobile Controls Bar -->
+            <div class="w-full max-w-4xl mt-3 grid grid-cols-2 gap-4 bg-slate-800 p-4 rounded-2xl border border-slate-700">
+                <!-- D-Pad Directional -->
+                <div class="flex items-center space-x-3 justify-start">
+                    <button id="btnBtnLeft" class="w-16 h-16 bg-slate-700 active:bg-yellow-400 active:text-slate-950 text-white rounded-2xl font-black text-2xl shadow-lg border-2 border-slate-600 flex items-center justify-center select-none">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button id="btnBtnRight" class="w-16 h-16 bg-slate-700 active:bg-yellow-400 active:text-slate-950 text-white rounded-2xl font-black text-2xl shadow-lg border-2 border-slate-600 flex items-center justify-center select-none">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center space-x-3 justify-end">
+                    <button id="btnBtnFire" class="px-5 h-16 bg-orange-600 active:bg-orange-500 text-white rounded-2xl font-black text-lg shadow-lg border-2 border-orange-400 flex items-center justify-center select-none space-x-1">
+                        <i class="fa-solid fa-fire text-xl"></i>
+                        <span>FIRE (F)</span>
+                    </button>
+                    <button id="btnBtnJump" class="px-6 h-16 bg-emerald-500 active:bg-emerald-400 text-slate-950 rounded-2xl font-black text-xl shadow-lg border-2 border-emerald-300 flex items-center justify-center select-none space-x-1">
+                        <i class="fa-solid fa-circle-arrow-up text-2xl"></i>
+                        <span>JUMP</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="w-full max-w-4xl text-center text-xs text-slate-400 mt-2 font-medium">
+                Keyboard Controls: <span class="text-yellow-300 font-bold">A / D / Left / Right</span> to Move, <span class="text-yellow-300 font-bold">Space / W / Up</span> to Jump, <span class="text-yellow-300 font-bold">F</span> to Throw Fireballs!
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FEEDBACK TOAST / POPUP -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 bg-slate-800 text-white border-2 border-yellow-400 px-6 py-4 rounded-2xl shadow-2xl flex items-center space-x-3 pointer-events-none">
+        <div id="toastIcon" class="text-3xl text-yellow-400"><i class="fa-solid fa-star"></i></div>
+        <div>
+            <h4 id="toastTitle" class="font-black text-lg text-yellow-300">Great Job!</h4>
+            <p id="toastMsg" class="text-sm text-slate-200 font-bold">You selected the correct answer!</p>
+        </div>
+    </div>
+
+    <!-- MAIN APPLICATION SCRIPT -->
+    <script>
+        /* ====================================================================
+           1. ACCESSIBILITY & GLOBAL STATE MANAGERS
+           ==================================================================== */
+        let currentTTSSpeed = 0.85;
+        let isDyslexiaFont = false;
+        let isHighContrast = false;
+
+        function setTTSSpeed(speed) {
+            currentTTSSpeed = speed;
+            ['btnSpeed06', 'btnSpeed085', 'btnSpeed10'].forEach(id => {
+                document.getElementById(id).className = "px-2 py-1 text-xs rounded-lg font-bold bg-slate-600 hover:bg-slate-500";
+            });
+            if (speed === 0.6) document.getElementById('btnSpeed06').className = "px-2 py-1 text-xs rounded-lg font-bold bg-blue-600 text-white";
+            if (speed === 0.85) document.getElementById('btnSpeed085').className = "px-2 py-1 text-xs rounded-lg font-bold bg-blue-600 text-white";
+            if (speed === 1.0) document.getElementById('btnSpeed10').className = "px-2 py-1 text-xs rounded-lg font-bold bg-blue-600 text-white";
+            speakTTS("Speed set to " + speed + " times");
+        }
+
+        function toggleDyslexiaFont() {
+            isDyslexiaFont = !isDyslexiaFont;
+            document.body.classList.toggle('dyslexia-font', isDyslexiaFont);
+            const btn = document.getElementById('dyslexiaBtn');
+            btn.classList.toggle('bg-purple-700', !isDyslexiaFont);
+            btn.classList.toggle('bg-emerald-600', isDyslexiaFont);
+            showToast(isDyslexiaFont ? "Dyslexia Font Enabled" : "Standard Font Enabled", "Font style updated!");
+        }
+
+        function toggleHighContrast() {
+            isHighContrast = !isHighContrast;
+            document.body.classList.toggle('high-contrast', isHighContrast);
+            showToast(isHighContrast ? "High Contrast On" : "Standard Mode", "Display contrast toggled!");
+        }
+
+        function speakTTS(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = currentTTSSpeed;
+            utterance.pitch = 1.0;
+            utterance.lang = 'en-US';
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function showToast(title, msg, isError = false) {
+            const toast = document.getElementById('toast');
+            const tTitle = document.getElementById('toastTitle');
+            const tMsg = document.getElementById('toastMsg');
+            const tIcon = document.getElementById('toastIcon');
+
+            tTitle.innerText = title;
+            tMsg.innerText = msg;
+            tIcon.innerHTML = isError ? `<i class="fa-solid fa-circle-xmark text-red-400"></i>` : `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+            
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+                toast.classList.remove('translate-y-0', 'opacity-100');
+            }, 2500);
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.nav-tab').forEach(el => {
+                el.className = "nav-tab flex items-center space-x-2 px-4 py-2.5 rounded-xl font-black text-sm sm:text-base bg-slate-700 hover:bg-slate-600 text-white border-2 border-transparent";
+            });
+
+            const activeTab = document.getElementById('mod-' + tabId);
+            activeTab.classList.remove('hidden');
+
+            const activeBtn = document.getElementById('tab-' + tabId);
+            activeBtn.className = "nav-tab active flex items-center space-x-2 px-4 py-2.5 rounded-xl font-black text-sm sm:text-base bg-yellow-400 text-slate-950 shadow-lg border-2 border-yellow-200";
+
+            if (tabId === 'mario') {
+                initMarioGame();
+            } else {
+                pauseMarioGame();
+            }
+        }
+
+        /* ====================================================================
+           2. MODULE 1: GRAMMAR SLIDES (EXTRA LARGE SEN FONTS & BADGES)
+           ==================================================================== */
+        const slidesData = [
+            {
+                id: 1,
+                title: "Capital Letters (A, B, C...)",
+                badge: "RULE 1",
+                contentHTML: `
+                    <div class="space-y-6">
+                        <p class="text-2xl sm:text-3xl text-slate-100 font-bold leading-relaxed">
+                            Use a <span class="bg-yellow-400 text-slate-950 px-3 py-1 rounded-xl font-black underline decoration-red-500">Capital Letter</span> for:
+                        </p>
+                        <ul class="space-y-4 text-xl sm:text-2xl text-slate-200 font-semibold pl-4">
+                            <li class="flex items-center space-x-3">
+                                <span class="w-10 h-10 bg-blue-600 text-white font-black rounded-full flex items-center justify-center text-xl shrink-0">1</span>
+                                <span>The <strong class="text-yellow-300">FIRST word</strong> at the start of a sentence.</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <span class="w-10 h-10 bg-blue-600 text-white font-black rounded-full flex items-center justify-center text-xl shrink-0">2</span>
+                                <span><strong>Names</strong> of people (e.g. <span class="text-cyan-300 font-bold border-b-2 border-cyan-300">M</span>ary <span class="text-cyan-300 font-bold border-b-2 border-cyan-300">W</span>ong, <span class="text-cyan-300 font-bold border-b-2 border-cyan-300">K</span>en <span class="text-cyan-300 font-bold border-b-2 border-cyan-300">L</span>eung).</span>
+                            </li>
+                            <li class="flex items-center space-x-3">
+                                <span class="w-10 h-10 bg-blue-600 text-white font-black rounded-full flex items-center justify-center text-xl shrink-0">3</span>
+                                <span><strong>Months</strong> of the year (e.g. <span class="text-emerald-300 font-bold border-b-2 border-emerald-300">S</span>eptember, <span class="text-emerald-300 font-bold border-b-2 border-emerald-300">O</span>ctober).</span>
+                            </li>
+                        </ul>
+                        <!-- Huge Example Card -->
+                        <div class="bg-slate-900 border-4 border-yellow-400 p-5 rounded-3xl shadow-xl mt-4">
+                            <p class="text-slate-400 text-sm font-bold uppercase tracking-wider mb-2">Example Sentence:</p>
+                            <p class="text-2xl sm:text-3xl font-black text-white leading-normal">
+                                <span class="text-yellow-300 text-4xl bg-yellow-950/80 px-2.5 py-1 rounded-xl border-2 border-yellow-400">M</span>y name is 
+                                <span class="text-yellow-300 text-4xl bg-yellow-950/80 px-2.5 py-1 rounded-xl border-2 border-yellow-400">K</span>en 
+                                <span class="text-yellow-300 text-4xl bg-yellow-950/80 px-2.5 py-1 rounded-xl border-2 border-yellow-400">L</span>eung.
+                            </p>
+                        </div>
+                    </div>
+                `,
+                ttsText: "Rule 1: Capital Letters. Use a capital letter for the first word of a sentence, names of people like Mary Wong and Ken Leung, and months like September and October. Example: My name is Ken Leung."
+            },
+            {
+                id: 2,
+                title: "Lowercase Letters (a, b, c...)",
+                badge: "RULE 2",
+                contentHTML: `
+                    <div class="space-y-6">
+                        <p class="text-2xl sm:text-3xl text-slate-100 font-bold leading-relaxed">
+                            Use <span class="bg-blue-500 text-white px-3 py-1 rounded-xl font-black">Lowercase Letters</span> for ordinary words inside sentences.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-slate-900 p-4 rounded-2xl border-2 border-slate-700">
+                                <p class="text-yellow-300 font-extrabold text-xl mb-1">Clothes & Things:</p>
+                                <p class="text-2xl font-bold text-white"><span class="text-blue-400 underline">y</span>ellow <span class="text-blue-400 underline">s</span>hirt</p>
+                            </div>
+                            <div class="bg-slate-900 p-4 rounded-2xl border-2 border-slate-700">
+                                <p class="text-yellow-300 font-extrabold text-xl mb-1">Places in Shop:</p>
+                                <p class="text-2xl font-bold text-white"><span class="text-blue-400 underline">f</span>itting <span class="text-blue-400 underline">r</span>oom</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900 border-4 border-blue-400 p-5 rounded-3xl shadow-xl">
+                            <p class="text-slate-400 text-sm font-bold uppercase tracking-wider mb-2">Example Sentence:</p>
+                            <p class="text-2xl sm:text-3xl font-black text-white leading-normal">
+                                I will hang the <span class="text-blue-300 text-4xl bg-blue-950 px-2 py-0.5 rounded-lg border border-blue-400">y</span>ellow shirt.
+                            </p>
+                        </div>
+                    </div>
+                `,
+                ttsText: "Rule 2: Lowercase Letters. Use lowercase letters for common objects like yellow shirt and fitting room. Example: I will hang the yellow shirt."
+            },
+            {
+                id: 3,
+                title: "Full Stop (.) for Statements",
+                badge: "RULE 3",
+                contentHTML: `
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-20 h-20 bg-red-600 rounded-3xl flex items-center justify-center text-white text-6xl font-black shadow-2xl animate-pulse-glow shrink-0 border-4 border-yellow-300">
+                                .
+                            </div>
+                            <p class="text-2xl sm:text-3xl text-slate-100 font-bold">
+                                Put a <span class="bg-red-600 text-white px-3 py-1 rounded-xl font-black">Full Stop (.)</span> at the end of a <span class="text-yellow-300 font-extrabold underline">Telling Sentence</span> (Statement).
+                            </p>
+                        </div>
+                        <div class="bg-slate-900 border-4 border-red-500 p-6 rounded-3xl shadow-xl space-y-4">
+                            <p class="text-slate-400 text-sm font-bold uppercase tracking-wider">Example Statements:</p>
+                            <p class="text-2xl sm:text-3xl font-black text-white flex items-center flex-wrap gap-2">
+                                <span>• My name is Ken Leung</span>
+                                <span class="w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center text-4xl font-black shadow-lg border-2 border-yellow-300">.</span>
+                            </p>
+                            <p class="text-2xl sm:text-3xl font-black text-white flex items-center flex-wrap gap-2">
+                                <span>• Date: 3rd September, 2026</span>
+                                <span class="w-12 h-12 bg-red-600 text-white rounded-2xl flex items-center justify-center text-4xl font-black shadow-lg border-2 border-yellow-300">.</span>
+                            </p>
+                        </div>
+                    </div>
+                `,
+                ttsText: "Rule 3: Full Stop. Put a full stop at the end of a telling sentence. Example: My name is Ken Leung. Date: 3rd September, 2026."
+            },
+            {
+                id: 4,
+                title: "Question Mark (?) for Questions",
+                badge: "RULE 4",
+                contentHTML: `
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-20 h-20 bg-amber-500 rounded-3xl flex items-center justify-center text-slate-950 text-6xl font-black shadow-2xl animate-pulse-glow shrink-0 border-4 border-yellow-200">
+                                ?
+                            </div>
+                            <p class="text-2xl sm:text-3xl text-slate-100 font-bold">
+                                Put a <span class="bg-amber-400 text-slate-950 px-3 py-1 rounded-xl font-black">Question Mark (?)</span> at the end of an <span class="text-yellow-300 font-extrabold underline">Asking Sentence</span> (Question).
+                            </p>
+                        </div>
+                        <div class="bg-slate-900 border-4 border-amber-400 p-6 rounded-3xl shadow-xl space-y-4">
+                            <p class="text-amber-300 text-base font-extrabold">Look for question words: <span class="underline">What, Where, Do, Does</span></p>
+                            <p class="text-2xl sm:text-3xl font-black text-white flex items-center flex-wrap gap-2">
+                                <span>• What size are you looking for</span>
+                                <span class="w-12 h-12 bg-amber-400 text-slate-950 rounded-2xl flex items-center justify-center text-4xl font-black shadow-lg border-2 border-white">?</span>
+                            </p>
+                            <p class="text-2xl sm:text-3xl font-black text-white flex items-center flex-wrap gap-2">
+                                <span>• Where is the fitting room</span>
+                                <span class="w-12 h-12 bg-amber-400 text-slate-950 rounded-2xl flex items-center justify-center text-4xl font-black shadow-lg border-2 border-white">?</span>
+                            </p>
+                        </div>
+                    </div>
+                `,
+                ttsText: "Rule 4: Question Mark. Put a question mark at the end of an asking sentence. Look for words like What, Where, Do, Does. Example: What size are you looking for? Where is the fitting room?"
+            }
+        ];
+
+        let currentSlideIdx = 0;
+
+        function renderSlide() {
+            const slide = slidesData[currentSlideIdx];
+            document.getElementById('slideBadge').innerText = `Slide ${slide.id} of ${slidesData.length}`;
+            
+            const viewport = document.getElementById('slideViewport');
+            viewport.innerHTML = `
+                <div class="mb-4">
+                    <span class="text-sm font-black text-yellow-400 uppercase tracking-widest bg-yellow-950 px-3 py-1 rounded-lg border border-yellow-600">${slide.badge}</span>
+                    <h3 class="text-3xl sm:text-4xl font-black text-yellow-300 mt-2">${slide.title}</h3>
+                </div>
+                ${slide.contentHTML}
+            `;
+
+            // Render Dot Indicators
+            const dots = document.getElementById('slideDots');
+            dots.innerHTML = slidesData.map((_, i) => `
+                <button onclick="goToSlide(${i})" class="w-4 h-4 rounded-full transition-all ${i === currentSlideIdx ? 'bg-yellow-400 w-8' : 'bg-slate-600'}"></button>
+            `).join('');
+
+            // Button states
+            document.getElementById('btnPrevSlide').disabled = currentSlideIdx === 0;
+            document.getElementById('btnNextSlide').disabled = currentSlideIdx === slidesData.length - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlideIdx < slidesData.length - 1) {
+                currentSlideIdx++;
+                renderSlide();
+                readCurrentSlide();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlideIdx > 0) {
+                currentSlideIdx--;
+                renderSlide();
+                readCurrentSlide();
+            }
+        }
+
+        function goToSlide(idx) {
+            currentSlideIdx = idx;
+            renderSlide();
+            readCurrentSlide();
+        }
+
+        function readCurrentSlide() {
+            speakTTS(slidesData[currentSlideIdx].ttsText);
+        }
+
+        /* ====================================================================
+           3. 60+ SENTENCE QUESTION BANK FOR FILL IN THE BLANKS
+           ==================================================================== */
+        const fill1Bank = [
+            { text_parts: ["", "here is ", "he fitt", "ng room?"], options: [["W", "w"], ["T", "t"], ["I", "i"]], answers: ["W", "t", "i"], full: "Where is the fitting room?", rule: "Capital 'W' starts the question. Lowercase 't' and 'i' for common words." },
+            { text_parts: ["My name is ", "en ", "eung."], options: [["K", "k"], ["L", "l"]], answers: ["K", "L"], full: "My name is Ken Leung.", rule: "Capital 'K' and 'L' for name Ken Leung." },
+            { text_parts: ["", "ate : 3rd ", "eptember, 2026."], options: [["D", "d"], ["S", "s"]], answers: ["D", "S"], full: "Date : 3rd September, 2026.", rule: "Capital 'D' for Date. Capital 'S' for month September." },
+            { text_parts: ["", " will hang the ", "ellow shirt."], options: [["I", "i"], ["Y", "y"]], answers: ["I", "y"], full: "I will hang the yellow shirt.", rule: "Capital 'I' for pronoun I. Lowercase 'y' for yellow." },
+            { text_parts: ["", "hat are y", "u loo", "ing for?"], options: [["W", "w"], ["O", "o"], ["K", "k"]], answers: ["W", "o", "k"], full: "What are you looking for?", rule: "Capital 'W' for question starter." },
+            { text_parts: ["", "ary ", "ong works in a clothes shop."], options: [["M", "m"], ["W", "w"]], answers: ["M", "W"], full: "Mary Wong works in a clothes shop.", rule: "Names Mary Wong use capital letters." },
+            { text_parts: ["", "ohn ", "g is a customer."], options: [["J", "j"], ["N", "n"]], answers: ["J", "N"], full: "John Ng is a customer.", rule: "Names John Ng use capital letters." },
+            { text_parts: ["", "he fitting room is over ", "here."], options: [["T", "t"], ["T", "t"]], answers: ["T", "t"], full: "The fitting room is over there.", rule: "Capital 'T' starts the sentence." },
+            { text_parts: ["", "o you have a ", "ed jacket?"], options: [["D", "d"], ["R", "r"]], answers: ["D", "r"], full: "Do you have a red jacket?", rule: "Capital 'D' for Do. Lowercase 'r' for red." },
+            { text_parts: ["", "ate : 15th ", "ctober, 2026."], options: [["D", "d"], ["O", "o"]], answers: ["D", "O"], full: "Date : 15th October, 2026.", rule: "Capital 'D' for Date. Capital 'O' for October." },
+            { text_parts: ["", " will fold the ", "ants."], options: [["I", "i"], ["P", "p"]], answers: ["I", "p"], full: "I will fold the pants.", rule: "Capital 'I' for pronoun I. Lowercase 'p' for pants." },
+            { text_parts: ["", "he mirror is near the ", "heckout."], options: [["T", "t"], ["C", "c"]], answers: ["T", "c"], full: "The mirror is near the checkout.", rule: "Capital 'T' starts sentence." },
+            { text_parts: ["", "here can I try on this ", "ress?"], options: [["W", "w"], ["D", "d"]], answers: ["W", "d"], full: "Where can I try on this dress?", rule: "Capital 'W' for Where. Lowercase 'd' for dress." },
+            { text_parts: ["", "isa ", "heung is a shop assistant."], options: [["L", "l"], ["C", "c"]], answers: ["L", "C"], full: "Lisa Cheung is a shop assistant.", rule: "Names Lisa Cheung use capital letters." },
+            { text_parts: ["", "lease pack these ", "hoes."], options: [["P", "p"], ["S", "s"]], answers: ["P", "s"], full: "Please pack these shoes.", rule: "Capital 'P' for Please." },
+            { text_parts: ["", "oes it fit ", "ell?"], options: [["D", "d"], ["W", "w"]], answers: ["D", "w"], full: "Does it fit well?", rule: "Capital 'D' for Does." },
+            { text_parts: ["", "ate : 1st ", "anuary, 2026."], options: [["D", "d"], ["J", "j"]], answers: ["D", "J"], full: "Date : 1st January, 2026.", rule: "Capital 'D' for Date. Capital 'J' for January." },
+            { text_parts: ["", "he price tag is on the ", "at."], options: [["T", "t"], ["H", "h"]], answers: ["T", "h"], full: "The price tag is on the hat.", rule: "Capital 'T' starts sentence." },
+            { text_parts: ["", "avid ", "ee buys a blue shirt."], options: [["D", "d"], ["L", "l"]], answers: ["D", "L"], full: "David Lee buys a blue shirt.", rule: "Names David Lee use capital letters." },
+            { text_parts: ["", "e will sort the clothes by ", "ize."], options: [["W", "w"], ["S", "s"]], answers: ["W", "s"], full: "We will sort the clothes by size.", rule: "Capital 'W' starts sentence." }
+        ];
+
+        const fill2Bank = [
+            { text: "Where is the fitting room", answer: "?", type: "Question", rule: "Starts with 'Where', asking for a location." },
+            { text: "My name is Ken Leung", answer: ".", type: "Statement", rule: "Tells information about a person's name." },
+            { text: "What size are you looking for", answer: "?", type: "Question", rule: "Starts with 'What', asking for size." },
+            { text: "I will hang the yellow shirt", answer: ".", type: "Statement", rule: "Tells an action to be done." },
+            { text: "Date : 3rd September, 2026", answer: ".", type: "Statement", rule: "Gives date information." },
+            { text: "Do you have this in blue", answer: "?", type: "Question", rule: "Starts with 'Do', asking if item is available." },
+            { text: "Does it fit well", answer: "?", type: "Question", rule: "Starts with 'Does', asking about fitting." },
+            { text: "The checkout is over there", answer: ".", type: "Statement", rule: "Tells location of checkout." },
+            { text: "Mary Wong works in a clothes shop", answer: ".", type: "Statement", rule: "Tells a fact about a person." },
+            { text: "Where can I try this on", answer: "?", type: "Question", rule: "Starts with 'Where', asking where to try on clothes." },
+            { text: "I will fold the pants by size", answer: ".", type: "Statement", rule: "Tells an action being planned." },
+            { text: "What color is the dress", answer: "?", type: "Question", rule: "Starts with 'What', asking about color." },
+            { text: "Please remove the security tag", answer: ".", type: "Statement", rule: "A polite instruction statement." },
+            { text: "Is this medium or large", answer: "?", type: "Question", rule: "Starts with 'Is', asking a choice question." },
+            { text: "The display table is messy", answer: ".", type: "Statement", rule: "Describes the display table." },
+            { text: "John Ng is looking for shoes", answer: ".", type: "Statement", rule: "Tells what John Ng is doing." },
+            { text: "Can I help you", answer: "?", type: "Question", rule: "Starts with 'Can', offering assistance." },
+            { text: "Here is a small white shirt", answer: ".", type: "Statement", rule: "Hands over an item." },
+            { text: "Where are the hangers", answer: "?", type: "Question", rule: "Starts with 'Where', asking about hangers." },
+            { text: "I will check the price tag", answer: ".", type: "Statement", rule: "Tells what action the assistant will do." }
+        ];
+
+        const fill3Bank = [
+            { capOpts: ["W", "w"], body: "hat size are you looking for", puncOpts: [".", "?"], capAns: "W", puncAns: "?", full: "What size are you looking for?", rule: "Capital 'W' starts the question, ending with question mark '?'." },
+            { capOpts: ["M", "m"], body: "y name is Ken Leung", puncOpts: [".", "?"], capAns: "M", puncAns: ".", full: "My name is Ken Leung.", rule: "Capital 'M' starts the statement, ending with full stop '.'." },
+            { capOpts: ["W", "w"], body: "here is the fitting room", puncOpts: [".", "?"], capAns: "W", puncAns: "?", full: "Where is the fitting room?", rule: "Capital 'W' starts the question, ending with question mark '?'." },
+            { capOpts: ["I", "i"], body: " will hang the yellow shirt", puncOpts: [".", "?"], capAns: "I", puncAns: ".", full: "I will hang the yellow shirt.", rule: "Capital 'I' starts statement, ending with full stop '.'." },
+            { capOpts: ["D", "d"], body: "o you have this in blue", puncOpts: [".", "?"], capAns: "D", puncAns: "?", full: "Do you have this in blue?", rule: "Capital 'D' starts question, ending with question mark '?'." },
+            { capOpts: ["T", "t"], body: "he checkout is over there", puncOpts: [".", "?"], capAns: "T", puncAns: ".", full: "The checkout is over there.", rule: "Capital 'T' starts statement, ending with full stop '.'." },
+            { capOpts: ["D", "d"], body: "oes it fit well", puncOpts: [".", "?"], capAns: "D", puncAns: "?", full: "Does it fit well?", rule: "Capital 'D' starts question, ending with question mark '?'." },
+            { capOpts: ["M", "m"], body: "ary Wong is a shop assistant", puncOpts: [".", "?"], capAns: "M", puncAns: ".", full: "Mary Wong is a shop assistant.", rule: "Capital 'M' for Mary, ending with full stop '.'." },
+            { capOpts: ["W", "w"], body: "here can I try on this dress", puncOpts: [".", "?"], capAns: "W", puncAns: "?", full: "Where can I try on this dress?", rule: "Capital 'W' for Where, ending with question mark '?'." },
+            { capOpts: ["I", "i"], body: " will fold the pants", puncOpts: [".", "?"], capAns: "I", puncAns: ".", full: "I will fold the pants.", rule: "Capital 'I' starts statement, ending with full stop '.'." },
+            { capOpts: ["W", "w"], body: "hat color do you want", puncOpts: [".", "?"], capAns: "W", puncAns: "?", full: "What color do you want?", rule: "Capital 'W' for What, ending with question mark '?'." },
+            { capOpts: ["T", "t"], body: "he mirror is near the fitting room", puncOpts: [".", "?"], capAns: "T", puncAns: ".", full: "The mirror is near the fitting room.", rule: "Capital 'T' starts statement, ending with full stop '.'." },
+            { capOpts: ["C", "c"], body: "an I help you find a jacket", puncOpts: [".", "?"], capAns: "C", puncAns: "?", full: "Can I help you find a jacket?", rule: "Capital 'C' starts question, ending with question mark '?'." },
+            { capOpts: ["J", "j"], body: "ohn Ng is a customer", puncOpts: [".", "?"], capAns: "J", puncAns: ".", full: "John Ng is a customer.", rule: "Capital 'J' for John, ending with full stop '.'." },
+            { capOpts: ["H", "h"], body: "ere is a medium blue shirt", puncOpts: [".", "?"], capAns: "H", puncAns: ".", full: "Here is a medium blue shirt.", rule: "Capital 'H' starts statement, ending with full stop '.'." },
+            { capOpts: ["I", "i"], body: "s this dress on sale", puncOpts: [".", "?"], capAns: "I", puncAns: "?", full: "Is this dress on sale?", rule: "Capital 'I' starts question, ending with question mark '?'." },
+            { capOpts: ["L", "l"], body: "et me check the rack for size large", puncOpts: [".", "?"], capAns: "L", puncAns: ".", full: "Let me check the rack for size large.", rule: "Capital 'L' starts statement, ending with full stop '.'." },
+            { capOpts: ["W", "w"], body: "here are the socks", puncOpts: [".", "?"], capAns: "W", puncAns: "?", full: "Where are the socks?", rule: "Capital 'W' starts question, ending with question mark '?'." },
+            { capOpts: ["P", "p"], body: "lease pack the clothes in a bag", puncOpts: [".", "?"], capAns: "P", puncAns: ".", full: "Please pack the clothes in a bag.", rule: "Capital 'P' starts statement, ending with full stop '.'." },
+            { capOpts: ["D", "d"], body: "ate : 15th October, 2026", puncOpts: [".", "?"], capAns: "D", puncAns: ".", full: "Date : 15th October, 2026.", rule: "Capital 'D' starts line, ending with full stop '.'." }
+        ];
+
+        /* ====================================================================
+           4. SINGLE-CARD INTERACTIVE SESSION MANAGERS FOR PARTS 1, 2, 3
+           ==================================================================== */
+        // Utility Helper to Shuffle Array
+        function shuffleArray(arr) {
+            return [...arr].sort(() => Math.random() - 0.5);
+        }
+
+        // --- PART 1 SESSION ---
+        let fill1Deck = [];
+        let fill1Idx = 0;
+        let fill1Score = 0;
+        let fill1CurrentSelections = [];
+        let fill1Submitted = false;
+
+        function startFill1Session() {
+            fill1Deck = shuffleArray(fill1Bank).slice(0, 10);
+            fill1Idx = 0;
+            fill1Score = 0;
+            renderFill1Card();
+        }
+
+        function renderFill1Card() {
+            const container = document.getElementById('fill1CardArea');
+            if (fill1Idx >= fill1Deck.length) {
+                // Round Complete Screen
+                container.innerHTML = `
+                    <div class="bg-slate-900 border-4 border-yellow-400 p-8 rounded-3xl text-center space-y-6">
+                        <div class="text-6xl text-yellow-300 animate-bounce"><i class="fa-solid fa-trophy"></i></div>
+                        <h3 class="text-3xl font-black text-white">Practice 1 Complete!</h3>
+                        <p class="text-2xl font-bold text-slate-200">Your Score: <span class="text-emerald-400 font-black text-4xl">${fill1Score}</span> / ${fill1Deck.length}</p>
+                        <button onclick="startFill1Session()" class="px-8 py-4 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black text-2xl rounded-2xl shadow-xl transition transform active:scale-95">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Play Another Round
+                        </button>
+                    </div>
+                `;
+                speakTTS(`Practice 1 Complete! You scored ${fill1Score} out of ${fill1Deck.length}!`);
+                return;
+            }
+
+            const item = fill1Deck[fill1Idx];
+            fill1Submitted = false;
+            fill1CurrentSelections = new Array(item.options.length).fill('');
+
+            document.getElementById('fill1Progress').innerText = `Question ${fill1Idx + 1} of ${fill1Deck.length}`;
+            document.getElementById('fill1ScoreText').innerText = `Score: ${fill1Score}`;
+
+            container.innerHTML = `
+                <div class="bg-slate-900 border-4 border-slate-700 p-6 sm:p-8 rounded-3xl space-y-6 shadow-2xl">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-blue-400 text-lg font-black">Fill in correct capital or lowercase letters:</span>
+                        <button onclick="speakTTS('${item.full}')" class="text-yellow-300 hover:text-white text-xl flex items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700">
+                            <i class="fa-solid fa-volume-high"></i> <span>Listen</span>
+                        </button>
+                    </div>
+
+                    <!-- Sentence Prompt -->
+                    <div class="flex flex-wrap items-center text-2xl sm:text-3xl font-black text-white gap-3 py-4 leading-relaxed">
+                        ${item.text_parts.map((part, i) => `
+                            <span>${part}</span>
+                            ${i < item.options.length ? `
+                                <div id="f1_slot_${i}" class="inline-flex bg-slate-800 p-1 rounded-2xl border-2 border-blue-400 gap-1 shadow-inner">
+                                    ${item.options[i].map(opt => `
+                                        <button onclick="selectFill1Letter(${i}, '${opt}')" id="f1_opt_${i}_${opt}" class="px-4 py-2 rounded-xl font-black text-2xl sm:text-3xl transition bg-slate-700 text-slate-200 hover:bg-slate-600">
+                                            ${opt}
+                                        </button>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        `).join('')}
+                    </div>
+
+                    <!-- Feedback Area (hidden until submit) -->
+                    <div id="fill1Feedback" class="hidden p-5 rounded-2xl border-2"></div>
+
+                    <!-- Submit / Next Footer -->
+                    <div class="flex justify-end pt-4 border-t border-slate-800">
+                        <button id="btnFill1Submit" onclick="submitFill1Answer()" class="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xl rounded-2xl shadow-xl flex items-center space-x-3 transform transition active:scale-95">
+                            <i class="fa-solid fa-paper-plane text-2xl"></i>
+                            <span>Submit Answer</span>
+                        </button>
+                        <button id="btnFill1Next" onclick="nextFill1Question()" class="hidden px-8 py-4 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black text-xl rounded-2xl shadow-xl flex items-center space-x-3 transform transition active:scale-95">
+                            <span>Next Sentence</span>
+                            <i class="fa-solid fa-arrow-right text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectFill1Letter(slotIdx, val) {
+            if (fill1Submitted) return;
+            fill1CurrentSelections[slotIdx] = val;
+            const item = fill1Deck[fill1Idx];
+            item.options[slotIdx].forEach(opt => {
+                const btn = document.getElementById(`f1_opt_${slotIdx}_${opt}`);
+                if (btn) {
+                    btn.className = opt === val 
+                        ? "px-4 py-2 rounded-xl font-black text-2xl sm:text-3xl transition bg-yellow-400 text-slate-950 scale-105 shadow" 
+                        : "px-4 py-2 rounded-xl font-black text-2xl sm:text-3xl transition bg-slate-700 text-slate-200 hover:bg-slate-600";
+                }
+            });
+        }
+
+        function submitFill1Answer() {
+            const item = fill1Deck[fill1Idx];
+            if (fill1CurrentSelections.some(s => s === '')) {
+                showToast("Incomplete", "Please select a letter for all blanks!", true);
+                return;
+            }
+
+            fill1Submitted = true;
+            let isCorrect = true;
+            item.answers.forEach((ans, i) => {
+                if (fill1CurrentSelections[i] !== ans) isCorrect = false;
+            });
+
+            const fb = document.getElementById('fill1Feedback');
+            fb.classList.remove('hidden');
+
+            if (isCorrect) {
+                fill1Score++;
+                document.getElementById('fill1ScoreText').innerText = `Score: ${fill1Score}`;
+                fb.className = "p-5 rounded-2xl border-2 border-emerald-400 bg-emerald-950/80 text-emerald-200 space-y-2";
+                fb.innerHTML = `
+                    <div class="flex items-center space-x-3 text-2xl font-black text-emerald-300">
+                        <i class="fa-solid fa-circle-check text-3xl"></i>
+                        <span>Correct! Great job!</span>
+                    </div>
+                    <p class="text-xl font-bold text-white">Sentence: <span class="text-yellow-300 font-black">${item.full}</span></p>
+                    <p class="text-sm font-semibold text-emerald-300"><i class="fa-solid fa-lightbulb mr-1"></i>${item.rule}</p>
+                `;
+                speakTTS(`Correct! ${item.full}`);
+            } else {
+                fb.className = "p-5 rounded-2xl border-2 border-red-500 bg-red-950/80 text-red-200 space-y-2";
+                fb.innerHTML = `
+                    <div class="flex items-center space-x-3 text-2xl font-black text-red-300">
+                        <i class="fa-solid fa-circle-xmark text-3xl"></i>
+                        <span>Not quite right!</span>
+                    </div>
+                    <p class="text-xl font-bold text-white">Correct sentence: <span class="text-yellow-300 font-black">${item.full}</span></p>
+                    <p class="text-sm font-semibold text-red-300"><i class="fa-solid fa-lightbulb mr-1"></i>${item.rule}</p>
+                `;
+                speakTTS(`Correct answer is: ${item.full}`);
+            }
+
+            document.getElementById('btnFill1Submit').classList.add('hidden');
+            document.getElementById('btnFill1Next').classList.remove('hidden');
+        }
+
+        function nextFill1Question() {
+            fill1Idx++;
+            renderFill1Card();
+        }
+
+        function resetFill1Round() {
+            startFill1Session();
+        }
+
+        // --- PART 2 SESSION ---
+        let fill2Deck = [];
+        let fill2Idx = 0;
+        let fill2Score = 0;
+        let fill2Selection = '';
+        let fill2Submitted = false;
+
+        function startFill2Session() {
+            fill2Deck = shuffleArray(fill2Bank).slice(0, 10);
+            fill2Idx = 0;
+            fill2Score = 0;
+            renderFill2Card();
+        }
+
+        function renderFill2Card() {
+            const container = document.getElementById('fill2CardArea');
+            if (fill2Idx >= fill2Deck.length) {
+                container.innerHTML = `
+                    <div class="bg-slate-900 border-4 border-pink-400 p-8 rounded-3xl text-center space-y-6">
+                        <div class="text-6xl text-pink-300 animate-bounce"><i class="fa-solid fa-trophy"></i></div>
+                        <h3 class="text-3xl font-black text-white">Practice 2 Complete!</h3>
+                        <p class="text-2xl font-bold text-slate-200">Your Score: <span class="text-emerald-400 font-black text-4xl">${fill2Score}</span> / ${fill2Deck.length}</p>
+                        <button onclick="startFill2Session()" class="px-8 py-4 bg-pink-500 hover:bg-pink-400 text-slate-950 font-black text-2xl rounded-2xl shadow-xl transition transform active:scale-95">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Play Another Round
+                        </button>
+                    </div>
+                `;
+                speakTTS(`Practice 2 Complete! You scored ${fill2Score} out of ${fill2Deck.length}!`);
+                return;
+            }
+
+            const item = fill2Deck[fill2Idx];
+            fill2Submitted = false;
+            fill2Selection = '';
+
+            document.getElementById('fill2Progress').innerText = `Question ${fill2Idx + 1} of ${fill2Deck.length}`;
+            document.getElementById('fill2ScoreText').innerText = `Score: ${fill2Score}`;
+
+            container.innerHTML = `
+                <div class="bg-slate-900 border-4 border-slate-700 p-6 sm:p-8 rounded-3xl space-y-6 shadow-2xl">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-pink-400 text-lg font-black">Choose Full Stop (.) or Question Mark (?):</span>
+                        <button onclick="speakTTS('${item.text}')" class="text-yellow-300 hover:text-white text-xl flex items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700">
+                            <i class="fa-solid fa-volume-high"></i> <span>Listen</span>
+                        </button>
+                    </div>
+
+                    <!-- Sentence Prompt -->
+                    <div class="flex flex-wrap items-center text-2xl sm:text-3xl font-black text-white gap-4 py-4 leading-relaxed">
+                        <span>${item.text}</span>
+                        <div class="flex space-x-3">
+                            <button id="f2_opt_period" onclick="selectFill2Mark('.')" class="w-16 h-16 rounded-2xl font-black text-4xl transition bg-slate-800 text-red-400 border-2 border-slate-600 hover:bg-slate-700 flex items-center justify-center shadow">
+                                .
+                            </button>
+                            <button id="f2_opt_question" onclick="selectFill2Mark('?')" class="w-16 h-16 rounded-2xl font-black text-4xl transition bg-slate-800 text-amber-300 border-2 border-slate-600 hover:bg-slate-700 flex items-center justify-center shadow">
+                                ?
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="fill2Feedback" class="hidden p-5 rounded-2xl border-2"></div>
+
+                    <div class="flex justify-end pt-4 border-t border-slate-800">
+                        <button id="btnFill2Submit" onclick="submitFill2Answer()" class="px-8 py-4 bg-pink-500 hover:bg-pink-400 text-slate-950 font-black text-xl rounded-2xl shadow-xl flex items-center space-x-3 transform transition active:scale-95">
+                            <i class="fa-solid fa-paper-plane text-2xl"></i>
+                            <span>Submit Answer</span>
+                        </button>
+                        <button id="btnFill2Next" onclick="nextFill2Question()" class="hidden px-8 py-4 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black text-xl rounded-2xl shadow-xl flex items-center space-x-3 transform transition active:scale-95">
+                            <span>Next Sentence</span>
+                            <i class="fa-solid fa-arrow-right text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectFill2Mark(mark) {
+            if (fill2Submitted) return;
+            fill2Selection = mark;
+            const btnPeriod = document.getElementById('f2_opt_period');
+            const btnQuestion = document.getElementById('f2_opt_question');
+
+            if (mark === '.') {
+                btnPeriod.className = "w-16 h-16 rounded-2xl font-black text-4xl transition bg-red-600 text-white scale-110 shadow-lg border-2 border-yellow-300 flex items-center justify-center";
+                btnQuestion.className = "w-16 h-16 rounded-2xl font-black text-4xl transition bg-slate-800 text-amber-300 border-2 border-slate-600 hover:bg-slate-700 flex items-center justify-center";
+            } else {
+                btnQuestion.className = "w-16 h-16 rounded-2xl font-black text-4xl transition bg-amber-400 text-slate-950 scale-110 shadow-lg border-2 border-white flex items-center justify-center";
+                btnPeriod.className = "w-16 h-16 rounded-2xl font-black text-4xl transition bg-slate-800 text-red-400 border-2 border-slate-600 hover:bg-slate-700 flex items-center justify-center";
+            }
+        }
+
+        function submitFill2Answer() {
+            const item = fill2Deck[fill2Idx];
+            if (!fill2Selection) {
+                showToast("Select Punctuation", "Please choose either . or ?", true);
+                return;
+            }
+
+            fill2Submitted = true;
+            const isCorrect = fill2Selection === item.answer;
+            const fb = document.getElementById('fill2Feedback');
+            fb.classList.remove('hidden');
+
+            if (isCorrect) {
+                fill2Score++;
+                document.getElementById('fill2ScoreText').innerText = `Score: ${fill2Score}`;
+                fb.className = "p-5 rounded-2xl border-2 border-emerald-400 bg-emerald-950/80 text-emerald-200 space-y-2";
+                fb.innerHTML = `
+                    <div class="flex items-center space-x-3 text-2xl font-black text-emerald-300">
+                        <i class="fa-solid fa-circle-check text-3xl"></i>
+                        <span>Correct! That's a ${item.type}!</span>
+                    </div>
+                    <p class="text-xl font-bold text-white">Sentence: <span class="text-yellow-300 font-black">${item.text}${item.answer}</span></p>
+                    <p class="text-sm font-semibold text-emerald-300"><i class="fa-solid fa-lightbulb mr-1"></i>${item.rule}</p>
+                `;
+                speakTTS(`Correct! ${item.text}${item.answer}`);
+            } else {
+                fb.className = "p-5 rounded-2xl border-2 border-red-500 bg-red-950/80 text-red-200 space-y-2";
+                fb.innerHTML = `
+                    <div class="flex items-center space-x-3 text-2xl font-black text-red-300">
+                        <i class="fa-solid fa-circle-xmark text-3xl"></i>
+                        <span>Not quite! It's a ${item.type}.</span>
+                    </div>
+                    <p class="text-xl font-bold text-white">Correct punctuation: <span class="text-yellow-300 font-black">${item.text}${item.answer}</span></p>
+                    <p class="text-sm font-semibold text-red-300"><i class="fa-solid fa-lightbulb mr-1"></i>${item.rule}</p>
+                `;
+                speakTTS(`Correct punctuation is: ${item.text}${item.answer}`);
+            }
+
+            document.getElementById('btnFill2Submit').classList.add('hidden');
+            document.getElementById('btnFill2Next').classList.remove('hidden');
+        }
+
+        function nextFill2Question() {
+            fill2Idx++;
+            renderFill2Card();
+        }
+
+        function resetFill2Round() {
+            startFill2Session();
+        }
+
+        // --- PART 3 SESSION ---
+        let fill3Deck = [];
+        let fill3Idx = 0;
+        let fill3Score = 0;
+        let fill3CapSel = '';
+        let fill3PuncSel = '';
+        let fill3Submitted = false;
+
+        function startFill3Session() {
+            fill3Deck = shuffleArray(fill3Bank).slice(0, 10);
+            fill3Idx = 0;
+            fill3Score = 0;
+            renderFill3Card();
+        }
+
+        function renderFill3Card() {
+            const container = document.getElementById('fill3CardArea');
+            if (fill3Idx >= fill3Deck.length) {
+                container.innerHTML = `
+                    <div class="bg-slate-900 border-4 border-emerald-400 p-8 rounded-3xl text-center space-y-6">
+                        <div class="text-6xl text-emerald-300 animate-bounce"><i class="fa-solid fa-trophy"></i></div>
+                        <h3 class="text-3xl font-black text-white">Practice 3 Complete!</h3>
+                        <p class="text-2xl font-bold text-slate-200">Your Score: <span class="text-emerald-400 font-black text-4xl">${fill3Score}</span> / ${fill3Deck.length}</p>
+                        <button onclick="startFill3Session()" class="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-2xl rounded-2xl shadow-xl transition transform active:scale-95">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Play Another Round
+                        </button>
+                    </div>
+                `;
+                speakTTS(`Practice 3 Complete! You scored ${fill3Score} out of ${fill3Deck.length}!`);
+                return;
+            }
+
+            const item = fill3Deck[fill3Idx];
+            fill3Submitted = false;
+            fill3CapSel = '';
+            fill3PuncSel = '';
+
+            document.getElementById('fill3Progress').innerText = `Question ${fill3Idx + 1} of ${fill3Deck.length}`;
+            document.getElementById('fill3ScoreText').innerText = `Score: ${fill3Score}`;
+
+            container.innerHTML = `
+                <div class="bg-slate-900 border-4 border-slate-700 p-6 sm:p-8 rounded-3xl space-y-6 shadow-2xl">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <span class="text-emerald-400 text-lg font-black">Select Capital Letter AND Punctuation Mark:</span>
+                        <button onclick="speakTTS('${item.full}')" class="text-yellow-300 hover:text-white text-xl flex items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-700">
+                            <i class="fa-solid fa-volume-high"></i> <span>Listen</span>
+                        </button>
+                    </div>
+
+                    <!-- Sentence Prompt -->
+                    <div class="flex flex-wrap items-center text-2xl sm:text-3xl font-black text-white gap-3 py-4 leading-relaxed">
+                        <!-- Start Cap Pill -->
+                        <div class="inline-flex bg-slate-800 p-1.5 rounded-2xl border-2 border-emerald-400 gap-1.5">
+                            ${item.capOpts.map(opt => `
+                                <button id="f3_cap_${opt}" onclick="selectFill3Cap('${opt}')" class="px-4 py-2 rounded-xl font-black text-2xl sm:text-3xl bg-slate-700 text-slate-200 hover:bg-slate-600">
+                                    ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        <span>${item.body}</span>
+
+                        <!-- End Punc Pill -->
+                        <div class="inline-flex bg-slate-800 p-1.5 rounded-2xl border-2 border-emerald-400 gap-1.5">
+                            ${item.puncOpts.map(punc => `
+                                <button id="f3_punc_${punc === '.' ? 'period' : 'qmark'}" onclick="selectFill3Punc('${punc}')" class="w-14 h-14 rounded-xl font-black text-3xl bg-slate-700 text-slate-200 hover:bg-slate-600 flex items-center justify-center">
+                                    ${punc}
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div id="fill3Feedback" class="hidden p-5 rounded-2xl border-2"></div>
+
+                    <div class="flex justify-end pt-4 border-t border-slate-800">
+                        <button id="btnFill3Submit" onclick="submitFill3Answer()" class="px-8 py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xl rounded-2xl shadow-xl flex items-center space-x-3 transform transition active:scale-95">
+                            <i class="fa-solid fa-paper-plane text-2xl"></i>
+                            <span>Submit Answer</span>
+                        </button>
+                        <button id="btnFill3Next" onclick="nextFill3Question()" class="hidden px-8 py-4 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black text-xl rounded-2xl shadow-xl flex items-center space-x-3 transform transition active:scale-95">
+                            <span>Next Sentence</span>
+                            <i class="fa-solid fa-arrow-right text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectFill3Cap(cap) {
+            if (fill3Submitted) return;
+            fill3CapSel = cap;
+            const item = fill3Deck[fill3Idx];
+            item.capOpts.forEach(opt => {
+                const btn = document.getElementById(`f3_cap_${opt}`);
+                if (btn) {
+                    btn.className = opt === cap 
+                        ? "px-4 py-2 rounded-xl font-black text-2xl sm:text-3xl bg-yellow-400 text-slate-950 scale-105 shadow" 
+                        : "px-4 py-2 rounded-xl font-black text-2xl sm:text-3xl bg-slate-700 text-slate-200 hover:bg-slate-600";
+                }
+            });
+        }
+
+        function selectFill3Punc(punc) {
+            if (fill3Submitted) return;
+            fill3PuncSel = punc;
+            const btnPeriod = document.getElementById('f3_punc_period');
+            const btnQmark = document.getElementById('f3_punc_qmark');
+
+            if (punc === '.') {
+                if (btnPeriod) btnPeriod.className = "w-14 h-14 rounded-xl font-black text-3xl bg-red-600 text-white scale-105 shadow flex items-center justify-center";
+                if (btnQmark) btnQmark.className = "w-14 h-14 rounded-xl font-black text-3xl bg-slate-700 text-slate-200 hover:bg-slate-600 flex items-center justify-center";
+            } else {
+                if (btnQmark) btnQmark.className = "w-14 h-14 rounded-xl font-black text-3xl bg-amber-400 text-slate-950 scale-105 shadow flex items-center justify-center";
+                if (btnPeriod) btnPeriod.className = "w-14 h-14 rounded-xl font-black text-3xl bg-slate-700 text-slate-200 hover:bg-slate-600 flex items-center justify-center";
+            }
+        }
+
+        function submitFill3Answer() {
+            const item = fill3Deck[fill3Idx];
+            if (!fill3CapSel || !fill3PuncSel) {
+                showToast("Incomplete", "Please select BOTH a starting letter and punctuation mark!", true);
+                return;
+            }
+
+            fill3Submitted = true;
+            const isCorrect = (fill3CapSel === item.capAns && fill3PuncSel === item.puncAns);
+            const fb = document.getElementById('fill3Feedback');
+            fb.classList.remove('hidden');
+
+            if (isCorrect) {
+                fill3Score++;
+                document.getElementById('fill3ScoreText').innerText = `Score: ${fill3Score}`;
+                fb.className = "p-5 rounded-2xl border-2 border-emerald-400 bg-emerald-950/80 text-emerald-200 space-y-2";
+                fb.innerHTML = `
+                    <div class="flex items-center space-x-3 text-2xl font-black text-emerald-300">
+                        <i class="fa-solid fa-circle-check text-3xl"></i>
+                        <span>Awesome! Both are correct!</span>
+                    </div>
+                    <p class="text-xl font-bold text-white">Full Sentence: <span class="text-yellow-300 font-black">${item.full}</span></p>
+                    <p class="text-sm font-semibold text-emerald-300"><i class="fa-solid fa-lightbulb mr-1"></i>${item.rule}</p>
+                `;
+                speakTTS(`Awesome! ${item.full}`);
+            } else {
+                fb.className = "p-5 rounded-2xl border-2 border-red-500 bg-red-950/80 text-red-200 space-y-2";
+                fb.innerHTML = `
+                    <div class="flex items-center space-x-3 text-2xl font-black text-red-300">
+                        <i class="fa-solid fa-circle-xmark text-3xl"></i>
+                        <span>Not quite right!</span>
+                    </div>
+                    <p class="text-xl font-bold text-white">Correct sentence: <span class="text-yellow-300 font-black">${item.full}</span></p>
+                    <p class="text-sm font-semibold text-red-300"><i class="fa-solid fa-lightbulb mr-1"></i>${item.rule}</p>
+                `;
+                speakTTS(`Correct sentence is: ${item.full}`);
+            }
+
+            document.getElementById('btnFill3Submit').classList.add('hidden');
+            document.getElementById('btnFill3Next').classList.remove('hidden');
+        }
+
+        function nextFill3Question() {
+            fill3Idx++;
+            renderFill3Card();
+        }
+
+        function resetFill3Round() {
+            startFill3Session();
+        }
+
+        /* ====================================================================
+           5. MODULE 5: ENHANCED SUPER MARIO PLATFORMER ENGINE (SMOOTH & 10 LIVES)
+           ==================================================================== */
+        let canvas, ctx;
+        let animationFrameId = null;
+        let gameLoopRunning = false;
+
+        // Player Mario State (Set to 10 Lives)
+        let mario = {
+            x: 60,
+            y: 200,
+            vx: 0,
+            vy: 0,
+            width: 32,
+            height: 48,
+            grounded: false,
+            facing: 'right',
+            isBig: false,
+            isFire: false,
+            lives: 10,
+            coins: 0,
+            score: 0,
+            invulnerableTimer: 0
+        };
+
+        // Game Environment
+        let cameraX = 0;
+        let currentLevel = 1;
+        let platforms = [];
+        let movingFloors = [];
+        let gaps = [];
+        let questionBlocks = [];
+        let enemies = [];
+        let fireballs = [];
+        let springs = [];
+        let fireBars = [];
+
+        // Key Press Controls
+        const keys = {
+            left: false,
+            right: false,
+            up: false,
+            fire: false
+        };
+
+        // Quiz Questions Data inside Mario Blocks
+        const quizBank = [
+            {
+                q: "Put the right mark: 'Where is the fitting room ___'",
+                options: ["?", "."],
+                correct: "?"
+            },
+            {
+                q: "Which name has correct CAPITAL letters?",
+                options: ["ken leung", "Ken Leung"],
+                correct: "Ken Leung"
+            },
+            {
+                q: "Put the right mark: 'I will hang the yellow shirt ___'",
+                options: [".", "?"],
+                correct: "."
+            },
+            {
+                q: "Which word starts with a CAPITAL letter?",
+                options: ["September", "shirt"],
+                correct: "September"
+            }
+        ];
+        let activeQuizBlock = null;
+
+        function initMarioGame() {
+            canvas = document.getElementById('gameCanvas');
+            ctx = canvas.getContext('2d');
+
+            setupControlListeners();
+            restartMarioGame();
+        }
+
+        function pauseMarioGame() {
+            gameLoopRunning = false;
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+        }
+
+        function setupControlListeners() {
+            window.addEventListener('keydown', e => {
+                if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = true;
+                if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = true;
+                if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.key === ' ') keys.up = true;
+                if (e.key === 'f' || e.key === 'F') {
+                    if (!keys.fire) shootFireball();
+                    keys.fire = true;
+                }
+            });
+
+            window.addEventListener('keyup', e => {
+                if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') keys.left = false;
+                if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
+                if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W' || e.key === ' ') keys.up = false;
+                if (e.key === 'f' || e.key === 'F') keys.fire = false;
+            });
+
+            // Touch Control Handlers
+            const bindTouch = (id, keyName) => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.addEventListener('touchstart', (e) => { e.preventDefault(); keys[keyName] = true; if (keyName === 'fire') shootFireball(); });
+                el.addEventListener('touchend', (e) => { e.preventDefault(); keys[keyName] = false; });
+                el.addEventListener('mousedown', () => { keys[keyName] = true; if (keyName === 'fire') shootFireball(); });
+                el.addEventListener('mouseup', () => { keys[keyName] = false; });
+            };
+
+            bindTouch('btnBtnLeft', 'left');
+            bindTouch('btnBtnRight', 'right');
+            bindTouch('btnBtnJump', 'up');
+            bindTouch('btnBtnFire', 'fire');
+        }
+
+        function changeLevel(lvl) {
+            currentLevel = parseInt(lvl);
+            restartMarioGame();
+        }
+
+        function restartMarioGame() {
+            // Hide overlays
+            document.getElementById('gameStatusOverlay').classList.add('hidden');
+            document.getElementById('gameStatusOverlay').classList.remove('flex');
+            document.getElementById('quizOverlay').classList.add('hidden');
+            document.getElementById('quizOverlay').classList.remove('flex');
+
+            // Reset keys
+            keys.left = false;
+            keys.right = false;
+            keys.up = false;
+            keys.fire = false;
+
+            // Reset Mario properties with 10 Lives
+            mario.lives = 10;
+            mario.coins = 0;
+            mario.score = 0;
+            mario.isBig = false;
+            mario.isFire = false;
+            mario.height = 48;
+            mario.invulnerableTimer = 0;
+
+            loadLevel(currentLevel);
+            updateHUD();
+
+            // Force restart game loop
+            gameLoopRunning = true;
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function loadLevel(lvl) {
+            mario.x = 60;
+            mario.y = 200;
+            mario.vx = 0;
+            mario.vy = 0;
+            cameraX = 0;
+            fireballs = [];
+
+            platforms = [];
+            movingFloors = [];
+            gaps = [];
+            questionBlocks = [];
+            enemies = [];
+            springs = [];
+            fireBars = [];
+
+            if (lvl === 1) {
+                // World 1-1 Meadow / Clothes Shop Entrance (Fair 80-90px Gaps)
+                platforms.push({ x: 0, y: 380, w: 650, h: 60, type: 'ground' });
+                platforms.push({ x: 740, y: 380, w: 550, h: 60, type: 'ground' });
+                platforms.push({ x: 1380, y: 380, w: 700, h: 60, type: 'ground' });
+
+                // Smooth Helper Lift across gap 1
+                movingFloors.push({ x: 650, y: 330, w: 90, h: 20, vx: 1.5, rangeMin: 650, rangeMax: 740 });
+
+                questionBlocks.push({ x: 220, y: 260, w: 40, h: 40, hit: false, quizIdx: 0 });
+                questionBlocks.push({ x: 280, y: 260, w: 40, h: 40, hit: false, quizIdx: 1 });
+                questionBlocks.push({ x: 880, y: 240, w: 40, h: 40, hit: false, quizIdx: 2 });
+                questionBlocks.push({ x: 1150, y: 230, w: 40, h: 40, hit: false, quizIdx: 3 });
+
+                springs.push({ x: 550, y: 350, w: 30, h: 30 });
+
+                enemies.push({ type: 'goomba', x: 380, y: 348, w: 32, h: 32, vx: -1.2, alive: true });
+                enemies.push({ type: 'koopa', x: 820, y: 340, w: 32, h: 40, vx: -1.0, alive: true, isShell: false });
+
+            } else if (lvl === 2) {
+                // World 1-2 Fitting Room Platform Caves (Balanced Gaps)
+                platforms.push({ x: 0, y: 380, w: 500, h: 60, type: 'cave' });
+                platforms.push({ x: 610, y: 380, w: 450, h: 60, type: 'cave' });
+                platforms.push({ x: 1160, y: 380, w: 800, h: 60, type: 'cave' });
+
+                movingFloors.push({ x: 500, y: 320, w: 90, h: 20, vy: 1.8, rangeMinY: 220, rangeMaxY: 340 });
+                movingFloors.push({ x: 1060, y: 300, w: 90, h: 20, vx: 2.0, rangeMin: 1060, rangeMax: 1160 });
+
+                fireBars.push({ cx: 800, cy: 260, length: 80, angle: 0, speed: 0.03 });
+
+                questionBlocks.push({ x: 200, y: 250, w: 40, h: 40, hit: false, quizIdx: 0 });
+                questionBlocks.push({ x: 750, y: 210, w: 40, h: 40, hit: false, quizIdx: 2 });
+
+                enemies.push({ type: 'goomba', x: 300, y: 348, w: 32, h: 32, vx: -1.5, alive: true });
+                enemies.push({ type: 'koopa', x: 700, y: 340, w: 32, h: 40, vx: -1.2, alive: true, isShell: false });
+
+            } else {
+                // World 2-1 Castle Bowser Boss Stage
+                platforms.push({ x: 0, y: 380, w: 600, h: 60, type: 'castle' });
+                platforms.push({ x: 700, y: 380, w: 1200, h: 60, type: 'castle' });
+
+                movingFloors.push({ x: 600, y: 330, w: 90, h: 20, vx: 1.5, rangeMin: 600, rangeMax: 700 });
+                fireBars.push({ cx: 350, cy: 260, length: 85, angle: 0, speed: 0.035 });
+
+                questionBlocks.push({ x: 220, y: 240, w: 40, h: 40, hit: false, quizIdx: 1 });
+
+                enemies.push({ type: 'bowser', x: 1250, y: 300, w: 80, h: 80, vx: -0.8, hp: 5, alive: true });
+            }
+        }
+
+        /* Physics & Update Loop */
+        function gameLoop(timestamp) {
+            if (!gameLoopRunning) return;
+
+            updatePhysics();
+            renderCanvas();
+
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function updatePhysics() {
+            // Smooth horizontal movement acceleration
+            if (keys.left) {
+                mario.vx = Math.max(mario.vx - 0.8, -4.8);
+                mario.facing = 'left';
+            } else if (keys.right) {
+                mario.vx = Math.min(mario.vx + 0.8, 4.8);
+                mario.facing = 'right';
+            } else {
+                mario.vx *= 0.78;
+                if (Math.abs(mario.vx) < 0.1) mario.vx = 0;
+            }
+
+            // Jump handling
+            if (keys.up && mario.grounded) {
+                mario.vy = -12.5;
+                mario.grounded = false;
+                playSynthSound('jump');
+            }
+
+            mario.vy += 0.62;
+            if (mario.vy > 12) mario.vy = 12;
+
+            mario.x += mario.vx;
+            mario.y += mario.vy;
+
+            // Smooth camera tracking
+            if (mario.x - cameraX > 400) cameraX = mario.x - 400;
+            if (mario.x - cameraX < 150 && cameraX > 0) cameraX = mario.x - 150;
+
+            mario.grounded = false;
+
+            // Solid Platform Collisions
+            platforms.forEach(p => {
+                if (mario.x + mario.width > p.x && mario.x < p.x + p.w) {
+                    if (mario.y + mario.height >= p.y && mario.y + mario.height <= p.y + p.h + 8 && mario.vy >= 0) {
+                        mario.y = p.y - mario.height;
+                        mario.vy = 0;
+                        mario.grounded = true;
+                    }
+                }
+            });
+
+            // Moving Platform Collisions
+            movingFloors.forEach(mf => {
+                if (mf.vx) {
+                    mf.x += mf.vx;
+                    if (mf.x <= mf.rangeMin || mf.x >= mf.rangeMax) mf.vx *= -1;
+                }
+                if (mf.vy) {
+                    mf.y += mf.vy;
+                    if (mf.y <= mf.rangeMinY || mf.y >= mf.rangeMaxY) mf.vy *= -1;
+                }
+
+                if (mario.x + mario.width > mf.x && mario.x < mf.x + mf.w) {
+                    if (mario.y + mario.height >= mf.y && mario.y + mario.height <= mf.y + mf.h + 8 && mario.vy >= 0) {
+                        mario.y = mf.y - mario.height;
+                        mario.vy = 0;
+                        mario.grounded = true;
+                        if (mf.vx) mario.x += mf.vx;
+                    }
+                }
+            });
+
+            // Springboard Bounce
+            springs.forEach(s => {
+                if (mario.x + mario.width > s.x && mario.x < s.x + s.w && mario.y + mario.height >= s.y && mario.y + mario.height <= s.y + s.h) {
+                    mario.vy = -16.5;
+                    playSynthSound('spring');
+                }
+            });
+
+            // Rotating Fire Bar Collision
+            fireBars.forEach(fb => {
+                fb.angle += fb.speed;
+                for (let r = 10; r <= fb.length; r += 20) {
+                    let fx = fb.cx + Math.cos(fb.angle) * r;
+                    let fy = fb.cy + Math.sin(fb.angle) * r;
+                    if (Math.hypot(mario.x + mario.width/2 - fx, mario.y + mario.height/2 - fy) < 16) {
+                        takeMarioDamage();
+                    }
+                }
+            });
+
+            // Question Block Head Bump
+            questionBlocks.forEach(qb => {
+                if (!qb.hit && mario.x + mario.width > qb.x && mario.x < qb.x + qb.w) {
+                    if (mario.y <= qb.y + qb.h && mario.y >= qb.y && mario.vy < 0) {
+                        qb.hit = true;
+                        mario.vy = 2;
+                        mario.y = qb.y + qb.h;
+                        triggerQuizBlock(qb.quizIdx);
+                    }
+                }
+            });
+
+            // Fireballs Physics & Enemy Collision
+            fireballs.forEach((fb, index) => {
+                fb.x += fb.vx;
+                fb.vy += 0.5;
+                fb.y += fb.vy;
+
+                platforms.forEach(p => {
+                    if (fb.x > p.x && fb.x < p.x + p.w && fb.y + 10 >= p.y && fb.y + 10 <= p.y + p.h) {
+                        fb.y = p.y - 10;
+                        fb.vy = -5.5;
+                    }
+                });
+
+                enemies.forEach(e => {
+                    if (e.alive && Math.hypot(fb.x - (e.x + e.w/2), fb.y - (e.y + e.h/2)) < 32) {
+                        if (e.type === 'bowser') {
+                            e.hp--;
+                            if (e.hp <= 0) e.alive = false;
+                        } else {
+                            e.alive = false;
+                        }
+                        fireballs.splice(index, 1);
+                        mario.score += 200;
+                        updateHUD();
+                        playSynthSound('hit');
+                    }
+                });
+
+                if (fb.x - cameraX > 900 || fb.y > 500) fireballs.splice(index, 1);
+            });
+
+            // Enemies Update & Collision
+            enemies.forEach(e => {
+                if (!e.alive) return;
+
+                if (e.type === 'goomba' || e.type === 'koopa') {
+                    e.x += e.vx;
+                    if (e.x < 10 || e.x > 2500) e.vx *= -1;
+                }
+
+                if (mario.x + mario.width > e.x && mario.x < e.x + e.w && mario.y + mario.height > e.y && mario.y < e.y + e.h) {
+                    if (mario.vy > 0 && mario.y + mario.height - mario.vy <= e.y + 14) {
+                        mario.vy = -8.5;
+                        playSynthSound('squish');
+                        if (e.type === 'bowser') {
+                            e.hp--;
+                            if (e.hp <= 0) e.alive = false;
+                        } else {
+                            e.alive = false;
+                        }
+                        mario.score += 100;
+                        updateHUD();
+                    } else {
+                        takeMarioDamage();
+                    }
+                }
+            });
+
+            // Pit Fall Respawn / Death
+            if (mario.y > 440) {
+                mario.lives--;
+                updateHUD();
+                playSynthSound('hurt');
+                if (mario.lives <= 0) {
+                    showGameOver(false);
+                } else {
+                    // Respawn Mario safely at start or camera
+                    mario.x = Math.max(60, cameraX);
+                    mario.y = 150;
+                    mario.vy = 0;
+                    mario.vx = 0;
+                    mario.invulnerableTimer = 60;
+                }
+            }
+
+            // Goal Level Clear
+            if (mario.x > 1750) {
+                playSynthSound('clear');
+                if (currentLevel < 3) {
+                    showToast("Level Complete!", "Moving to next stage!");
+                    currentLevel++;
+                    restartMarioGame();
+                } else {
+                    showGameOver(true);
+                }
+            }
+
+            if (mario.invulnerableTimer > 0) mario.invulnerableTimer--;
+        }
+
+        function shootFireball() {
+            if (!mario.isFire) return;
+            fireballs.push({
+                x: mario.x + (mario.facing === 'right' ? mario.width : 0),
+                y: mario.y + 15,
+                vx: mario.facing === 'right' ? 8 : -8,
+                vy: 2
+            });
+            playSynthSound('fireball');
+        }
+
+        function takeMarioDamage() {
+            if (mario.invulnerableTimer > 0) return;
+            mario.invulnerableTimer = 60;
+            if (mario.isFire) {
+                mario.isFire = false;
+                showToast("Lost Fire Power!", "Returned to Super Mario");
+            } else if (mario.isBig) {
+                mario.isBig = false;
+                mario.height = 48;
+                showToast("Shrank!", "Returned to Normal Mario");
+            } else {
+                mario.lives--;
+                updateHUD();
+                playSynthSound('hurt');
+                if (mario.lives <= 0) {
+                    showGameOver(false);
+                }
+            }
+        }
+
+        function triggerQuizBlock(idx) {
+            pauseMarioGame();
+            activeQuizBlock = quizBank[idx % quizBank.length];
+
+            const overlay = document.getElementById('quizOverlay');
+            const qBox = document.getElementById('quizQuestionBox');
+            const optBox = document.getElementById('quizOptionsBox');
+
+            qBox.innerText = activeQuizBlock.q;
+            speakTTS(activeQuizBlock.q);
+
+            optBox.innerHTML = activeQuizBlock.options.map(opt => `
+                <button onclick="answerMarioQuiz('${opt}')" class="px-6 py-4 bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black text-2xl rounded-2xl shadow-xl transform transition hover:scale-105 active:scale-95">
+                    ${opt}
+                </button>
+            `).join('');
+
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        }
+
+        function answerMarioQuiz(chosen) {
+            document.getElementById('quizOverlay').classList.add('hidden');
+            document.getElementById('quizOverlay').classList.remove('flex');
+
+            if (chosen === activeQuizBlock.correct) {
+                mario.isBig = true;
+                mario.isFire = true;
+                mario.height = 60;
+                mario.coins += 5;
+                mario.score += 500;
+                updateHUD();
+                showToast("SUPER MARIO FIRE POWER UP! 🔥", "You earned Fireballs and 5 Coins!");
+                speakTTS("Correct! You got Fireball power up!");
+                playSynthSound('powerup');
+            } else {
+                showToast("Incorrect Answer", "No power up this time! Keep practicing!");
+                speakTTS("Not quite right! Keep trying!");
+            }
+
+            gameLoopRunning = true;
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+
+        function updateHUD() {
+            document.getElementById('marioLives').innerText = mario.lives;
+            document.getElementById('marioCoins').innerText = mario.coins;
+            document.getElementById('marioScore').innerText = mario.score;
+            document.getElementById('marioFireState').innerText = mario.isFire ? "Fire 🔥" : (mario.isBig ? "Super MSO" : "Normal");
+        }
+
+        function showGameOver(isWin) {
+            pauseMarioGame();
+            const overlay = document.getElementById('gameStatusOverlay');
+            const title = document.getElementById('gameStatusTitle');
+            const desc = document.getElementById('gameStatusDesc');
+
+            if (isWin) {
+                title.innerText = "COURSE CLEAR! 🎉";
+                title.className = "text-4xl sm:text-5xl font-black text-emerald-400 mb-3 drop-shadow-lg";
+                desc.innerText = "Outstanding job! You mastered English capitalization, punctuation, and defeated Bowser!";
+                speakTTS("Course Clear! You are an English Grammar Master!");
+            } else {
+                title.innerText = "GAME OVER";
+                title.className = "text-4xl sm:text-5xl font-black text-red-500 mb-3 drop-shadow-lg";
+                desc.innerText = "Don't give up! Replay to practice rules and jump higher!";
+                speakTTS("Game Over! Try again!");
+            }
+
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        }
+
+        /* Canvas Vector Graphics Drawing */
+        function renderCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (currentLevel === 1) {
+                ctx.fillStyle = "#5c94fc";
+            } else if (currentLevel === 2) {
+                ctx.fillStyle = "#000000";
+            } else {
+                ctx.fillStyle = "#4a0000";
+            }
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.save();
+            ctx.translate(-cameraX, 0);
+
+            // Render Platforms
+            platforms.forEach(p => {
+                if (p.type === 'ground') {
+                    ctx.fillStyle = "#e75910";
+                    ctx.fillRect(p.x, p.y, p.w, p.h);
+                    ctx.fillStyle = "#00b800";
+                    ctx.fillRect(p.x, p.y, p.w, 12);
+                } else if (p.type === 'cave') {
+                    ctx.fillStyle = "#0070ec";
+                    ctx.fillRect(p.x, p.y, p.w, p.h);
+                } else {
+                    ctx.fillStyle = "#9c4a00";
+                    ctx.fillRect(p.x, p.y, p.w, p.h);
+                }
+            });
+
+            // Render Goal Flagpole & Castle at End of Stage
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(1750, 180, 10, 200);
+            ctx.fillStyle = "#FBD000";
+            ctx.beginPath();
+            ctx.arc(1755, 175, 12, 0, Math.PI * 2);
+            ctx.fill();
+            // Flag
+            ctx.fillStyle = "#E52521";
+            ctx.beginPath();
+            ctx.moveTo(1750, 190);
+            ctx.lineTo(1700, 210);
+            ctx.lineTo(1750, 230);
+            ctx.fill();
+
+            // Render Movable Floors
+            movingFloors.forEach(mf => {
+                ctx.fillStyle = "#f8b800";
+                ctx.fillRect(mf.x, mf.y, mf.w, mf.h);
+                ctx.fillStyle = "#000";
+                ctx.strokeRect(mf.x, mf.y, mf.w, mf.h);
+            });
+
+            // Render Question Blocks
+            questionBlocks.forEach(qb => {
+                ctx.fillStyle = qb.hit ? "#8b4513" : "#f8b800";
+                ctx.fillRect(qb.x, qb.y, qb.w, qb.h);
+                ctx.strokeStyle = "#000";
+                ctx.strokeRect(qb.x, qb.y, qb.w, qb.h);
+
+                if (!qb.hit) {
+                    ctx.fillStyle = "#000";
+                    ctx.font = "bold 24px Fredoka, sans-serif";
+                    ctx.fillText("?", qb.x + 13, qb.y + 28);
+                }
+            });
+
+            // Render Springboards
+            springs.forEach(s => {
+                ctx.fillStyle = "#cccccc";
+                ctx.fillRect(s.x, s.y + 10, s.w, s.h - 10);
+                ctx.fillStyle = "#ff0000";
+                ctx.fillRect(s.x - 2, s.y, s.w + 4, 10);
+            });
+
+            // Render Rotating Fire Bars
+            fireBars.forEach(fb => {
+                for (let r = 10; r <= fb.length; r += 20) {
+                    let fx = fb.cx + Math.cos(fb.angle) * r;
+                    let fy = fb.cy + Math.sin(fb.angle) * r;
+                    ctx.fillStyle = "#ff4500";
+                    ctx.beginPath();
+                    ctx.arc(fx, fy, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            });
+
+            // Render Enemies
+            enemies.forEach(e => {
+                if (!e.alive) return;
+                if (e.type === 'goomba') drawGoomba(e.x, e.y);
+                if (e.type === 'koopa') drawKoopa(e.x, e.y);
+                if (e.type === 'piranha') drawPiranha(e.x, e.y);
+                if (e.type === 'bowser') drawBowser(e.x, e.y);
+            });
+
+            // Render Fireballs
+            fireballs.forEach(fb => {
+                ctx.fillStyle = "#ff4500";
+                ctx.beginPath();
+                ctx.arc(fb.x, fb.y, 6, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Render Super Mario
+            drawSuperMario(mario.x, mario.y, mario.width, mario.height, mario.facing, mario.isFire);
+
+            ctx.restore();
+        }
+
+        function drawSuperMario(x, y, w, h, facing, isFire) {
+            ctx.save();
+            ctx.translate(x + w/2, y + h/2);
+            if (facing === 'left') ctx.scale(-1, 1);
+
+            const hatColor = isFire ? "#ffffff" : "#E52521";
+            const shirtColor = isFire ? "#ffffff" : "#E52521";
+            const overallColor = isFire ? "#E52521" : "#0028C8";
+
+            // Cap
+            ctx.fillStyle = hatColor;
+            ctx.beginPath();
+            ctx.ellipse(0, -h/2 + 8, 14, 8, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillRect(0, -h/2 + 8, 16, 4);
+
+            // 'M' Emblem
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(-2, -h/2 + 7, 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#E52521";
+            ctx.font = "bold 7px Fredoka";
+            ctx.fillText("M", -5, -h/2 + 9);
+
+            // Face
+            ctx.fillStyle = "#ffcc99";
+            ctx.fillRect(-8, -h/2 + 12, 18, 12);
+            ctx.beginPath();
+            ctx.arc(8, -h/2 + 17, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Mustache
+            ctx.fillStyle = "#4a2c00";
+            ctx.fillRect(2, -h/2 + 18, 12, 4);
+
+            // Eye
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(3, -h/2 + 13, 3, 4);
+
+            // Shirt & Overalls
+            ctx.fillStyle = shirtColor;
+            ctx.fillRect(-10, -h/2 + 24, 20, 12);
+            ctx.fillStyle = overallColor;
+            ctx.fillRect(-8, -h/2 + 28, 16, 14);
+
+            // Buttons & Boots
+            ctx.fillStyle = "#FBD000";
+            ctx.beginPath();
+            ctx.arc(-4, -h/2 + 32, 2, 0, Math.PI * 2);
+            ctx.arc(4, -h/2 + 32, 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#ffffff";
+            ctx.beginPath();
+            ctx.arc(10, -h/2 + 30, 4, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = "#8b4513";
+            ctx.fillRect(-10, h/2 - 8, 8, 8);
+            ctx.fillRect(2, h/2 - 8, 10, 8);
+
+            ctx.restore();
+        }
+
+        function drawGoomba(x, y) {
+            ctx.fillStyle = "#8b4513";
+            ctx.beginPath();
+            ctx.arc(x + 16, y + 16, 16, Math.PI, 0);
+            ctx.fillRect(x + 4, y + 16, 24, 12);
+            ctx.fill();
+            ctx.fillStyle = "#fff";
+            ctx.fillRect(x + 8, y + 12, 4, 8);
+            ctx.fillRect(x + 20, y + 12, 4, 8);
+            ctx.fillStyle = "#000";
+            ctx.fillRect(x + 10, y + 14, 2, 4);
+            ctx.fillRect(x + 20, y + 14, 2, 4);
+        }
+
+        function drawKoopa(x, y) {
+            ctx.fillStyle = "#00b800";
+            ctx.beginPath();
+            ctx.arc(x + 16, y + 20, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#f8b800";
+            ctx.beginPath();
+            ctx.arc(x + 22, y + 8, 8, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function drawPiranha(x, y) {
+            ctx.fillStyle = "#00b800";
+            ctx.fillRect(x, y + 20, 36, 20);
+            ctx.fillStyle = "#ff0000";
+            ctx.beginPath();
+            ctx.arc(x + 18, y + 10, 14, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(x + 8, y + 8, 20, 4);
+        }
+
+        function drawBowser(x, y) {
+            ctx.fillStyle = "#008000";
+            ctx.fillRect(x, y + 20, 70, 50);
+            ctx.fillStyle = "#ff4500";
+            ctx.fillRect(x + 20, y, 40, 20);
+            ctx.fillStyle = "#f8b800";
+            ctx.beginPath();
+            ctx.arc(x + 15, y + 45, 25, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function playSynthSound(type) {
+            try {
+                const ctxAudio = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctxAudio.createOscillator();
+                const gain = ctxAudio.createGain();
+                osc.connect(gain);
+                gain.connect(ctxAudio.destination);
+
+                if (type === 'jump') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(150, ctxAudio.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(400, ctxAudio.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.2, ctxAudio.currentTime);
+                    gain.gain.linearRampToValueAtTime(0, ctxAudio.currentTime + 0.15);
+                    osc.start();
+                    osc.stop(ctxAudio.currentTime + 0.15);
+                } else if (type === 'fireball') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(600, ctxAudio.currentTime);
+                    osc.frequency.linearRampToValueAtTime(200, ctxAudio.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.2, ctxAudio.currentTime);
+                    gain.gain.linearRampToValueAtTime(0, ctxAudio.currentTime + 0.1);
+                    osc.start();
+                    osc.stop(ctxAudio.currentTime + 0.1);
+                } else if (type === 'powerup') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(300, ctxAudio.currentTime);
+                    osc.frequency.setValueAtTime(400, ctxAudio.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(500, ctxAudio.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.2, ctxAudio.currentTime);
+                    gain.gain.linearRampToValueAtTime(0, ctxAudio.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctxAudio.currentTime + 0.3);
+                } else if (type === 'squish') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(200, ctxAudio.currentTime);
+                    osc.frequency.linearRampToValueAtTime(80, ctxAudio.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.3, ctxAudio.currentTime);
+                    gain.gain.linearRampToValueAtTime(0, ctxAudio.currentTime + 0.1);
+                    osc.start();
+                    osc.stop(ctxAudio.currentTime + 0.1);
+                }
+            } catch (e) {
+                // Ignore audio restriction
+            }
+        }
+
+        /* Initialize App on Load */
+        window.addEventListener('load', () => {
+            renderSlide();
+            startFill1Session();
+            startFill2Session();
+            startFill3Session();
+        });
+    </script>
+</body>
+</html>
