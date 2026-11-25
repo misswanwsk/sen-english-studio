@@ -153,6 +153,9 @@
                 <button id="mode-flashcards" onclick="changeMode('flashcards')" class="px-2.5 py-1 rounded-lg text-xs md:text-sm font-bold transition btn-bounce text-slate-600 hover:text-slate-900">
                     📖 flashcards
                 </button>
+                <button id="mode-reading" onclick="changeMode('reading')" class="px-2.5 py-1 rounded-lg text-xs md:text-sm font-bold transition btn-bounce text-slate-600 hover:text-slate-900">
+                    📚 reading
+                </button>
                 <button id="mode-blank" onclick="changeMode('blank')" class="px-2.5 py-1 rounded-lg text-xs md:text-sm font-bold transition btn-bounce bg-indigo-600 text-white shadow-sm">
                     a _ c fill blanks
                 </button>
@@ -271,6 +274,242 @@
                 <!-- Dynamic Flashcards -->
             </div>
 
+        </div>
+
+
+        <!-- =================================================================
+             READING MATERIAL (RECIPE) & COMPREHENSION VIEWPORT ('📚 reading')
+        ================================================================== -->
+        <div id="readingContainer" class="hidden w-full h-full max-h-[78vh] bg-white rounded-3xl p-3 md:p-5 shadow-xl border-4 border-emerald-100 flex flex-col lg:flex-row gap-3 md:gap-4 overflow-hidden">
+            
+            <!-- Left Panel: Illustrated Fruit Salad Recipe Reading Material -->
+            <div class="w-full lg:w-1/2 h-1/2 lg:h-full bg-amber-50/40 rounded-2xl p-3 md:p-4 border-2 border-amber-200 flex flex-col gap-2.5 overflow-y-auto">
+                <div class="flex flex-wrap items-center justify-between gap-2 bg-white p-2 rounded-xl border border-amber-200 shrink-0">
+                    <div class="flex items-center gap-2">
+                        <span class="text-xl md:text-2xl">👦📖</span>
+                        <span class="text-sm md:text-base font-black text-slate-800">
+                            Tom is reading a <span class="text-purple-700 underline decoration-2">recipe</span>.
+                        </span>
+                    </div>
+                    <button type="button" onclick="speakReadingPassage()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-sm btn-bounce lowercase">
+                        🔊 listen recipe
+                    </button>
+                </div>
+
+                <!-- Recipe Title Card -->
+                <div class="bg-white rounded-2xl p-3 border-2 border-slate-200 flex flex-col gap-2.5 shadow-sm">
+                    <div class="flex items-center justify-between border-b-2 border-slate-100 pb-2">
+                        <h2 class="text-xl md:text-2xl font-black text-teal-900 tracking-wide">
+                            🥗 Fruit Salad
+                        </h2>
+                        <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-extrabold px-2.5 py-0.5 rounded-full lowercase">
+                            recipe
+                        </span>
+                    </div>
+
+                    <!-- Ingredients Box (Yellow Dashed Border matching worksheet) -->
+                    <div class="bg-yellow-50/90 border-2 border-dashed border-amber-400 rounded-2xl p-2.5 md:p-3 flex flex-col gap-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm md:text-base font-black text-slate-900">Ingredients:</span>
+                            <button type="button" onclick="speak('Ingredients: 1. fruits, oranges, apples. 2. vegetables, cucumbers, lettuce. 3. salad dressing.')" class="bg-amber-200 hover:bg-amber-300 text-amber-950 text-xs font-extrabold px-2.5 py-0.5 rounded-lg btn-bounce lowercase">
+                                🔊 listen
+                            </button>
+                        </div>
+                        <ul class="space-y-1.5 text-xs md:text-sm font-bold text-slate-800">
+                            <li class="flex items-center justify-between gap-2 bg-white/80 px-2.5 py-1 rounded-xl border border-amber-200">
+                                <span>1. fruits (oranges, apples)</span>
+                                <span class="text-lg">🍊🍎</span>
+                            </li>
+                            <li class="flex items-center justify-between gap-2 bg-white/80 px-2.5 py-1 rounded-xl border border-amber-200">
+                                <span>2. vegetables (cucumbers, lettuce)</span>
+                                <span class="text-lg">🥒🥬</span>
+                            </li>
+                            <li class="flex items-center justify-between gap-2 bg-white/80 px-2.5 py-1 rounded-xl border border-amber-200">
+                                <span>3. salad dressing</span>
+                                <span class="text-lg">🧴🥗</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Steps Box (Sky Blue Dashed Border matching worksheet) -->
+                    <div class="bg-sky-50/90 border-2 border-dashed border-sky-400 rounded-2xl p-2.5 md:p-3 flex flex-col gap-1.5">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm md:text-base font-black text-slate-900">Steps:</span>
+                            <button type="button" onclick="speak('Steps: 1. First, cut the fruits and vegetables into small pieces. 2. Then, put the fruits and vegetables in a bowl. 3. Next, mix the fruits and vegetables. 4. Finally, add some salad dressing.')" class="bg-sky-200 hover:bg-sky-300 text-sky-950 text-xs font-extrabold px-2.5 py-0.5 rounded-lg btn-bounce lowercase">
+                                🔊 listen
+                            </button>
+                        </div>
+                        <ol class="space-y-1.5 text-xs md:text-sm font-bold text-slate-800">
+                            <li class="flex items-center justify-between gap-2 bg-white/90 px-2.5 py-1.5 rounded-xl border border-sky-200">
+                                <span>1. First, <span class="text-pink-600 font-black">cut</span> the fruits and vegetables into small pieces.</span>
+                                <span class="text-lg shrink-0">🔪</span>
+                            </li>
+                            <li class="flex items-center justify-between gap-2 bg-white/90 px-2.5 py-1.5 rounded-xl border border-sky-200">
+                                <span>2. Then, <span class="text-pink-600 font-black">put</span> the fruits and vegetables in a bowl.</span>
+                                <span class="text-lg shrink-0">🥣</span>
+                            </li>
+                            <li class="flex items-center justify-between gap-2 bg-white/90 px-2.5 py-1.5 rounded-xl border border-sky-200">
+                                <span>3. Next, <span class="text-pink-600 font-black">mix</span> the fruits and vegetables.</span>
+                                <span class="text-lg shrink-0">🥄</span>
+                            </li>
+                            <li class="flex items-center justify-between gap-2 bg-white/90 px-2.5 py-1.5 rounded-xl border border-sky-200">
+                                <span>4. Finally, <span class="text-pink-600 font-black">add</span> some salad dressing.</span>
+                                <span class="text-lg shrink-0">🫗</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Interactive Reading Comprehension Questions (Q1, Q2, Q3) -->
+            <div class="w-full lg:w-1/2 h-1/2 lg:h-full bg-slate-50 rounded-2xl p-3 md:p-4 border-2 border-slate-200 flex flex-col justify-between gap-2.5 overflow-y-auto">
+                <div class="flex items-center justify-between gap-2 bg-white p-2 rounded-xl border border-slate-200 shrink-0">
+                    <span class="text-sm md:text-base font-black text-indigo-950 lowercase">
+                        ✏️ reading comprehension questions
+                    </span>
+                    <button type="button" onclick="resetReadingQuiz()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-xs font-extrabold px-2.5 py-1 rounded-xl btn-bounce lowercase">
+                        ↻ reset
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-y-auto space-y-3 pr-1">
+                    <!-- Question 1 -->
+                    <div id="readQ1Card" class="bg-white rounded-2xl p-3 border-2 border-slate-200 space-y-2 shadow-sm">
+                        <div class="flex items-center justify-between gap-2">
+                            <p class="text-sm md:text-base font-black text-slate-900">
+                                1. <span class="text-rose-600">What</span> is Tom reading?
+                            </p>
+                            <button type="button" onclick="speak('Question 1. What is Tom reading? Tom is reading a blank.')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-xs font-extrabold px-2.5 py-1 rounded-lg btn-bounce shrink-0">
+                                🔊
+                            </button>
+                        </div>
+                        <p class="text-sm md:text-base font-bold text-slate-700">
+                            Tom is reading a <span id="readQ1Blank" class="inline-block bg-amber-100 border-b-2 border-amber-500 text-amber-950 px-3 py-0.5 rounded-lg font-black">__________</span>.
+                        </p>
+                        <div id="readQ1Options" class="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-0.5">
+                            <button type="button" onclick="answerReadingQ1('recipe', this)" class="bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 hover:border-indigo-400 text-slate-800 font-extrabold text-sm py-2 px-3 rounded-xl btn-bounce">
+                                recipe
+                            </button>
+                            <button type="button" onclick="answerReadingQ1('storybook', this)" class="bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 hover:border-indigo-400 text-slate-800 font-extrabold text-sm py-2 px-3 rounded-xl btn-bounce">
+                                storybook
+                            </button>
+                            <button type="button" onclick="answerReadingQ1('menu', this)" class="bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 hover:border-indigo-400 text-slate-800 font-extrabold text-sm py-2 px-3 rounded-xl btn-bounce">
+                                menu
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 (Multi-select checkboxes matching worksheet a, b, c, d) -->
+                    <div id="readQ2Card" class="bg-white rounded-2xl p-3 border-2 border-slate-200 space-y-2 shadow-sm">
+                        <div class="flex items-center justify-between gap-2">
+                            <p class="text-sm md:text-base font-black text-slate-900">
+                                2. <span class="text-rose-600">What</span> ingredients do you need to make a salad?
+                                <span class="block text-xs font-bold text-slate-500">(You can choose more than one answer.)</span>
+                            </p>
+                            <button type="button" onclick="speak('Question 2. What ingredients do you need to make a salad? You can choose more than one answer.')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-xs font-extrabold px-2.5 py-1 rounded-lg btn-bounce shrink-0">
+                                🔊
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                            <button type="button" id="readQ2-a" onclick="toggleReadingQ2('a')" class="bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 rounded-xl p-2 flex flex-col items-center gap-1 btn-bounce">
+                                <div class="w-full flex items-center justify-between text-xs font-black text-slate-700">
+                                    <span>a. fruits</span>
+                                    <span id="readQ2-check-a" class="w-5 h-5 rounded border-2 border-slate-400 bg-white flex items-center justify-center text-xs"></span>
+                                </div>
+                                <div class="w-14 h-14 flex items-center justify-center" id="readQ2-svg-a"></div>
+                            </button>
+
+                            <button type="button" id="readQ2-b" onclick="toggleReadingQ2('b')" class="bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 rounded-xl p-2 flex flex-col items-center gap-1 btn-bounce">
+                                <div class="w-full flex items-center justify-between text-xs font-black text-slate-700">
+                                    <span>b. rice</span>
+                                    <span id="readQ2-check-b" class="w-5 h-5 rounded border-2 border-slate-400 bg-white flex items-center justify-center text-xs"></span>
+                                </div>
+                                <div class="w-14 h-14 flex items-center justify-center" id="readQ2-svg-b"></div>
+                            </button>
+
+                            <button type="button" id="readQ2-c" onclick="toggleReadingQ2('c')" class="bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 rounded-xl p-2 flex flex-col items-center gap-1 btn-bounce">
+                                <div class="w-full flex items-center justify-between text-xs font-black text-slate-700">
+                                    <span>c. dressing</span>
+                                    <span id="readQ2-check-c" class="w-5 h-5 rounded border-2 border-slate-400 bg-white flex items-center justify-center text-xs"></span>
+                                </div>
+                                <div class="w-14 h-14 flex items-center justify-center" id="readQ2-svg-c"></div>
+                            </button>
+
+                            <button type="button" id="readQ2-d" onclick="toggleReadingQ2('d')" class="bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 rounded-xl p-2 flex flex-col items-center gap-1 btn-bounce">
+                                <div class="w-full flex items-center justify-between text-xs font-black text-slate-700">
+                                    <span>d. cake</span>
+                                    <span id="readQ2-check-d" class="w-5 h-5 rounded border-2 border-slate-400 bg-white flex items-center justify-center text-xs"></span>
+                                </div>
+                                <div class="w-14 h-14 flex items-center justify-center" id="readQ2-svg-d"></div>
+                            </button>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="button" id="btnCheckReadQ2" onclick="checkReadingQ2()" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs md:text-sm font-black px-4 py-1.5 rounded-xl shadow-sm btn-bounce lowercase">
+                                ✅ check question 2
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 (Number steps 2-4 with Step 1 pre-filled matching worksheet) -->
+                    <div id="readQ3Card" class="bg-white rounded-2xl p-3 border-2 border-slate-200 space-y-2 shadow-sm">
+                        <div class="flex items-center justify-between gap-2">
+                            <p class="text-sm md:text-base font-black text-slate-900">
+                                3. Put the numbers (<span class="text-rose-600">2-4</span>) to show the steps for making fruit salad.
+                            </p>
+                            <button type="button" onclick="speak('Question 3. Put the numbers 2 to 4 to show the steps for making fruit salad. Step 1 is Cut the fruits into small pieces.')" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-800 text-xs font-extrabold px-2.5 py-1 rounded-lg btn-bounce shrink-0">
+                                🔊
+                            </button>
+                        </div>
+
+                        <div class="space-y-1.5 text-xs md:text-sm font-bold text-slate-800">
+                            <div class="flex items-center gap-2.5 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <select id="readQ3-step4" aria-label="Step number for Add some salad dressing" class="w-12 h-9 rounded-lg border-2 border-indigo-300 bg-white text-center font-black text-base text-indigo-900">
+                                    <option value="">?</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                                <span>Add some salad dressing.</span>
+                            </div>
+
+                            <div class="flex items-center gap-2.5 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <select id="readQ3-step3" aria-label="Step number for Mix the fruits and vegetables" class="w-12 h-9 rounded-lg border-2 border-indigo-300 bg-white text-center font-black text-base text-indigo-900">
+                                    <option value="">?</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                                <span>Mix the fruits and vegetables.</span>
+                            </div>
+
+                            <div class="flex items-center gap-2.5 bg-slate-50 p-2 rounded-xl border border-slate-200">
+                                <select id="readQ3-step2" aria-label="Step number for Put the fruits in the bowl" class="w-12 h-9 rounded-lg border-2 border-indigo-300 bg-white text-center font-black text-base text-indigo-900">
+                                    <option value="">?</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                </select>
+                                <span>Put the fruits in the bowl.</span>
+                            </div>
+
+                            <div class="flex items-center gap-2.5 bg-emerald-50/70 p-2 rounded-xl border border-emerald-300">
+                                <span class="w-12 h-9 rounded-lg border-2 border-emerald-500 bg-emerald-500 text-white flex items-center justify-center font-black text-base shrink-0">
+                                    1
+                                </span>
+                                <span>Cut the fruits into small pieces.</span>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end">
+                            <button type="button" id="btnCheckReadQ3" onclick="checkReadingQ3()" class="bg-emerald-500 hover:bg-emerald-600 text-white text-xs md:text-sm font-black px-4 py-1.5 rounded-xl shadow-sm btn-bounce lowercase">
+                                ✅ check question 3
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- =================================================================
@@ -1260,6 +1499,7 @@
 
             const gameCard = document.getElementById('gameCard');
             const flashcardsContainer = document.getElementById('flashcardsContainer');
+            const readingContainer = document.getElementById('readingContainer');
             const seqOrderContainer = document.getElementById('seqOrderContainer');
             const seqFillContainer = document.getElementById('seqFillContainer');
             const marioContainer = document.getElementById('marioContainer');
@@ -1270,6 +1510,7 @@
 
             gameCard.classList.add('hidden');
             flashcardsContainer.classList.add('hidden');
+            if (readingContainer) readingContainer.classList.add('hidden');
             seqOrderContainer.classList.add('hidden');
             seqFillContainer.classList.add('hidden');
             marioContainer.classList.add('hidden');
@@ -1284,6 +1525,10 @@
                 flashcardsContainer.classList.remove('hidden');
                 document.getElementById('progressBar').style.width = '100%';
                 renderFlashcards();
+            } else if (mode === 'reading') {
+                stopMarioGame();
+                if (readingContainer) readingContainer.classList.remove('hidden');
+                initReadingMode();
             } else if (mode === 'seqorder') {
                 stopMarioGame();
                 seqOrderContainer.classList.remove('hidden');
@@ -1333,7 +1578,7 @@
             });
 
             // Mode Pills
-            ['flashcards', 'blank', 'matching', 'listening', 'seqorder', 'seqfill', 'mario'].forEach(m => {
+            ['flashcards', 'reading', 'blank', 'matching', 'listening', 'seqorder', 'seqfill', 'mario'].forEach(m => {
                 const btn = document.getElementById(`mode-${m}`);
                 if (btn) {
                     btn.className = state.mode === m
@@ -2102,6 +2347,207 @@
             }
         }
 
+
+        /* =====================================================================
+           5E. READING COMPREHENSION MODE ('📚 reading')
+        ===================================================================== */
+        let readingQ1Solved = false;
+        let readingQ2Solved = false;
+        let readingQ3Solved = false;
+        let readingQ2Selected = { a: false, b: false, c: false, d: false };
+
+        function updateReadingProgress() {
+            const solvedCount = (readingQ1Solved ? 1 : 0) + (readingQ2Solved ? 1 : 0) + (readingQ3Solved ? 1 : 0);
+            document.getElementById('progressBar').style.width = `${(solvedCount / 3) * 100}%`;
+            if (solvedCount === 3) {
+                setTimeout(() => {
+                    showSummary("great reading!", "you answered all recipe questions!", "📖");
+                }, 900);
+            }
+        }
+
+        function initReadingMode() {
+            // Populate Q2 picture illustrations matching worksheet a, b, c, d
+            const svgFruits = `<svg class="w-full h-full" viewBox="0 0 100 100">
+                <circle cx="34" cy="58" r="22" fill="#F97316" stroke="#C2410C" stroke-width="3"/>
+                <path d="M34 36 Q42 26 50 30 Q42 38 34 36 Z" fill="#22C55E"/>
+                <circle cx="68" cy="52" r="22" fill="#EF4444" stroke="#B91C1C" stroke-width="3"/>
+                <path d="M68 30 L68 22 M68 28 Q78 22 82 28 Q74 32 68 28 Z" fill="#22C55E" stroke="#15803D" stroke-width="2"/>
+            </svg>`;
+            const svgCake = `<svg class="w-full h-full" viewBox="0 0 100 100">
+                <polygon points="18,46 82,34 82,78 18,86" fill="#FDE68A" stroke="#92400E" stroke-width="3"/>
+                <polygon points="18,46 82,34 62,22 18,36" fill="#78350F"/>
+                <line x1="18" y1="60" x2="82" y2="50" stroke="#92400E" stroke-width="4"/>
+                <line x1="18" y1="73" x2="82" y2="64" stroke="#92400E" stroke-width="4"/>
+                <circle cx="52" cy="24" r="6" fill="#EF4444"/>
+            </svg>`;
+
+            const slotA = document.getElementById('readQ2-svg-a');
+            const slotB = document.getElementById('readQ2-svg-b');
+            const slotC = document.getElementById('readQ2-svg-c');
+            const slotD = document.getElementById('readQ2-svg-d');
+            if (slotA) slotA.innerHTML = svgFruits;
+            if (slotB) slotB.innerHTML = SVG_GRAPHICS['rice'];
+            if (slotC) slotC.innerHTML = SVG_GRAPHICS['salad dressing'];
+            if (slotD) slotD.innerHTML = svgCake;
+            updateReadingProgress();
+        }
+
+        function resetReadingQuiz() {
+            readingQ1Solved = false;
+            readingQ2Solved = false;
+            readingQ3Solved = false;
+            readingQ2Selected = { a: false, b: false, c: false, d: false };
+
+            const q1Blank = document.getElementById('readQ1Blank');
+            if (q1Blank) {
+                q1Blank.innerText = '__________';
+                q1Blank.className = 'inline-block bg-amber-100 border-b-2 border-amber-500 text-amber-950 px-3 py-0.5 rounded-lg font-black';
+            }
+            document.querySelectorAll('#readQ1Options button').forEach(b => {
+                b.disabled = false;
+                b.className = 'bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 hover:border-indigo-400 text-slate-800 font-extrabold text-sm py-2 px-3 rounded-xl btn-bounce';
+            });
+
+            ['a', 'b', 'c', 'd'].forEach(k => {
+                const cardBtn = document.getElementById(`readQ2-${k}`);
+                const chk = document.getElementById(`readQ2-check-${k}`);
+                if (cardBtn) cardBtn.className = 'bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 rounded-xl p-2 flex flex-col items-center gap-1 btn-bounce';
+                if (chk) {
+                    chk.innerText = '';
+                    chk.className = 'w-5 h-5 rounded border-2 border-slate-400 bg-white flex items-center justify-center text-xs';
+                }
+            });
+
+            ['readQ3-step2', 'readQ3-step3', 'readQ3-step4'].forEach(id => {
+                const sel = document.getElementById(id);
+                if (sel) {
+                    sel.value = '';
+                    sel.disabled = false;
+                    sel.className = 'w-12 h-9 rounded-lg border-2 border-indigo-300 bg-white text-center font-black text-base text-indigo-900';
+                }
+            });
+            updateReadingProgress();
+        }
+
+        function speakReadingPassage() {
+            speak("Tom is reading a recipe. Fruit Salad. Ingredients: 1. fruits, oranges, apples. 2. vegetables, cucumbers, lettuce. 3. salad dressing. Steps: 1. First, cut the fruits and vegetables into small pieces. 2. Then, put the fruits and vegetables in a bowl. 3. Next, mix the fruits and vegetables. 4. Finally, add some salad dressing.");
+        }
+
+        function answerReadingQ1(choice, btn) {
+            if (readingQ1Solved) return;
+            const card = document.getElementById('readQ1Card');
+            if (choice === 'recipe') {
+                readingQ1Solved = true;
+                addScore(10);
+                playSFX('correct');
+                const blank = document.getElementById('readQ1Blank');
+                blank.innerText = 'recipe';
+                blank.className = 'inline-block bg-emerald-500 text-white px-3 py-0.5 rounded-lg font-black';
+                btn.className = 'bg-emerald-500 text-white border-2 border-emerald-600 font-extrabold text-sm py-2 px-3 rounded-xl';
+                document.querySelectorAll('#readQ1Options button').forEach(b => b.disabled = true);
+                const praise = CORRECT_PRAISE[Math.floor(Math.random() * CORRECT_PRAISE.length)];
+                speak(`${praise} Tom is reading a recipe.`);
+                createFloatingText(praise, true);
+                updateReadingProgress();
+            } else {
+                playSFX('wrong');
+                const msg = WRONG_PROMPT[Math.floor(Math.random() * WRONG_PROMPT.length)];
+                speak(msg);
+                createFloatingText(msg, false);
+                card.classList.add('animate-shake');
+                btn.classList.add('bg-rose-500', 'text-white', 'border-rose-600');
+                setTimeout(() => {
+                    card.classList.remove('animate-shake');
+                    btn.classList.remove('bg-rose-500', 'text-white', 'border-rose-600');
+                }, 700);
+            }
+        }
+
+        function toggleReadingQ2(key) {
+            if (readingQ2Solved) return;
+            readingQ2Selected[key] = !readingQ2Selected[key];
+            const cardBtn = document.getElementById(`readQ2-${key}`);
+            const chk = document.getElementById(`readQ2-check-${key}`);
+            if (readingQ2Selected[key]) {
+                cardBtn.className = 'bg-indigo-50 border-2 border-indigo-500 rounded-xl p-2 flex flex-col items-center gap-1 btn-bounce';
+                chk.innerText = '✓';
+                chk.className = 'w-5 h-5 rounded border-2 border-indigo-600 bg-indigo-600 text-white flex items-center justify-center text-xs font-black';
+            } else {
+                cardBtn.className = 'bg-slate-50 hover:bg-indigo-50 border-2 border-slate-200 rounded-xl p-2 flex flex-col items-center gap-1 btn-bounce';
+                chk.innerText = '';
+                chk.className = 'w-5 h-5 rounded border-2 border-slate-400 bg-white flex items-center justify-center text-xs';
+            }
+            playSFX('coin');
+        }
+
+        function checkReadingQ2() {
+            if (readingQ2Solved) return;
+            const card = document.getElementById('readQ2Card');
+            // Correct answers from the recipe: a (fruits) and c (salad dressing)
+            const isCorrect = readingQ2Selected.a && readingQ2Selected.c && !readingQ2Selected.b && !readingQ2Selected.d;
+            if (isCorrect) {
+                readingQ2Solved = true;
+                addScore(15);
+                playSFX('correct');
+                ['a', 'c'].forEach(k => {
+                    document.getElementById(`readQ2-${k}`).className = 'bg-emerald-50 border-2 border-emerald-500 rounded-xl p-2 flex flex-col items-center gap-1';
+                });
+                const praise = CORRECT_PRAISE[Math.floor(Math.random() * CORRECT_PRAISE.length)];
+                speak(`${praise} You need fruits and salad dressing.`);
+                createFloatingText(praise, true);
+                updateReadingProgress();
+            } else {
+                playSFX('wrong');
+                const msg = WRONG_PROMPT[Math.floor(Math.random() * WRONG_PROMPT.length)];
+                speak(msg);
+                createFloatingText(msg, false);
+                card.classList.add('animate-shake');
+                setTimeout(() => card.classList.remove('animate-shake'), 650);
+            }
+        }
+
+        function checkReadingQ3() {
+            if (readingQ3Solved) return;
+            const card = document.getElementById('readQ3Card');
+            const s2 = document.getElementById('readQ3-step2');
+            const s3 = document.getElementById('readQ3-step3');
+            const s4 = document.getElementById('readQ3-step4');
+
+            // Worksheet order:
+            // [4] Add some salad dressing.
+            // [3] Mix the fruits and vegetables.
+            // [2] Put the fruits in the bowl.
+            // [1] Cut the fruits into small pieces.
+            const ok2 = s2.value === '2';
+            const ok3 = s3.value === '3';
+            const ok4 = s4.value === '4';
+
+            s2.className = `w-12 h-9 rounded-lg border-2 ${ok2 ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-rose-500 bg-rose-50 text-rose-900'} text-center font-black text-base`;
+            s3.className = `w-12 h-9 rounded-lg border-2 ${ok3 ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-rose-500 bg-rose-50 text-rose-900'} text-center font-black text-base`;
+            s4.className = `w-12 h-9 rounded-lg border-2 ${ok4 ? 'border-emerald-500 bg-emerald-50 text-emerald-900' : 'border-rose-500 bg-rose-50 text-rose-900'} text-center font-black text-base`;
+
+            if (ok2 && ok3 && ok4) {
+                readingQ3Solved = true;
+                s2.disabled = true;
+                s3.disabled = true;
+                s4.disabled = true;
+                addScore(15);
+                playSFX('correct');
+                const praise = CORRECT_PRAISE[Math.floor(Math.random() * CORRECT_PRAISE.length)];
+                speak(`${praise} 1, Cut. 2, Put. 3, Mix. 4, Add.`);
+                createFloatingText(praise, true);
+                updateReadingProgress();
+            } else {
+                playSFX('wrong');
+                const msg = WRONG_PROMPT[Math.floor(Math.random() * WRONG_PROMPT.length)];
+                speak(msg);
+                createFloatingText(msg, false);
+                card.classList.add('animate-shake');
+                setTimeout(() => card.classList.remove('animate-shake'), 650);
+            }
+        }
+
         /* =====================================================================
            6. CLASSIC SUPER MARIO PLATFORMER ENGINE ('🍄 super mario')
         ===================================================================== */
@@ -2142,6 +2588,8 @@
         let marioPlatforms = [];
         let marioCrumblePlatforms = [];
         let marioBlocks = [];
+        let marioToolBoxes = [];
+        let marioBumpers = [];
         let marioPipes = [];
         let marioSprings = [];
         let marioFireBars = [];
@@ -2549,31 +2997,26 @@
                 });
             }
 
-            // 3. '?' Vocabulary Question Blocks & Brick Blocks
+            // 3. More '?' Vocabulary Question Blocks, Golden '🧰' Tool Boxes & Brick Blocks
             marioBlocks = [];
+            marioToolBoxes = [];
             let questionBlockCount = 0;
+            const toolRewards = ['fire', 'star', 'life', 'super'];
             groundSegments.forEach((seg, segIdx) => {
                 if (segIdx === groundSegments.length - 1) return;
-                const startX = segIdx === 0 ? seg.x + 155 : seg.x + 48;
-                for (let bx = startX; bx <= seg.x + seg.width - 135; bx += 195) {
-                    const nearPipe = marioPipes.some(p => bx + 110 > p.x - 16 && bx < p.x + p.w + 16);
+                const startX = segIdx === 0 ? seg.x + 135 : seg.x + 36;
+                for (let bx = startX; bx <= seg.x + seg.width - 125; bx += 155) {
+                    const nearPipe = marioPipes.some(p => bx + 115 > p.x - 14 && bx < p.x + p.w + 14);
                     if (nearPipe) continue;
 
                     questionBlockCount++;
-                    const isStarBlock = questionBlockCount % 4 === 0;
+                    const isStarBlock = questionBlockCount % 3 === 0;
+                    const toolType = toolRewards[questionBlockCount % toolRewards.length];
 
+                    // Lower row: '?' Question Block + Brick + '🧰' Tool Box + '?' Question Block
                     marioBlocks.push({
                         x: bx,
-                        y: 200,
-                        w: 34,
-                        h: 34,
-                        kind: 'brick',
-                        hit: false,
-                        bounceY: 0
-                    });
-                    marioBlocks.push({
-                        x: bx + 36,
-                        y: 200,
+                        y: 202,
                         w: 34,
                         h: 34,
                         kind: 'question',
@@ -2582,27 +3025,35 @@
                         bounceY: 0
                     });
                     marioBlocks.push({
-                        x: bx + 72,
-                        y: 200,
+                        x: bx + 36,
+                        y: 202,
                         w: 34,
                         h: 34,
                         kind: 'brick',
                         hit: false,
                         bounceY: 0
                     });
+                    marioToolBoxes.push({
+                        x: bx + 72,
+                        y: 202,
+                        w: 34,
+                        h: 34,
+                        tool: toolType,
+                        hit: false,
+                        bounceY: 0
+                    });
 
-                    if (segIdx % 2 === 1) {
-                        marioBlocks.push({
-                            x: bx + 36,
-                            y: 132,
-                            w: 34,
-                            h: 34,
-                            kind: 'question',
-                            reward: 'powerup',
-                            hit: false,
-                            bounceY: 0
-                        });
-                    }
+                    // Upper bonus '?' block on every segment so students have plenty of question & tool boxes
+                    marioBlocks.push({
+                        x: bx + 36,
+                        y: 130,
+                        w: 34,
+                        h: 34,
+                        kind: 'question',
+                        reward: questionBlockCount % 2 === 0 ? 'star' : 'powerup',
+                        hit: false,
+                        bounceY: 0
+                    });
                 }
             });
 
@@ -2619,6 +3070,24 @@
                     }
                 });
             }
+
+            // 4B. Bouncy Pinball Bumper Mushrooms & Floating Cloud Pads (Fun & Challenging for SEN!)
+            marioBumpers = [];
+            groundSegments.forEach((seg, segIdx) => {
+                if (segIdx === 0 || segIdx === groundSegments.length - 1) return;
+                const bx = seg.x + Math.floor(seg.width * 0.65);
+                const clearOfObstacles =
+                    !marioPipes.some(p => Math.abs(p.x - bx) < 70) &&
+                    !marioSprings.some(s => Math.abs(s.x - bx) < 65);
+                if (clearOfObstacles) {
+                    marioBumpers.push({
+                        x: bx,
+                        y: 172,
+                        r: 16,
+                        pulse: 0
+                    });
+                }
+            });
 
             // 5. Donut / Crumble Falling Platforms (Wobble & Drop when stepped on, then respawn!)
             marioCrumblePlatforms = [];
@@ -2828,17 +3297,24 @@
                 }
             });
 
-            // 13. End-of-Level Goal Flagpole & Castle
+            // 13. End-of-Level Goal Flagpole & Castle (Properly aligned on final ground segment)
+            const goalFlagX = finalSegX + 110;
+            const goalCastleX = finalSegX + 190;
+            const requiredFinalWidth = 340;
+            const lastPlatform = marioPlatforms[marioPlatforms.length - 1];
+            if (lastPlatform && lastPlatform.width < requiredFinalWidth) {
+                lastPlatform.width = requiredFinalWidth;
+            }
             marioFlag = {
-                x: finalSegX + 120,
+                x: goalFlagX,
                 y: floorY - 170,
-                width: 14,
+                width: 18,
                 height: 170,
                 flagSlideY: 0,
                 cleared: false
             };
             marioCastle = {
-                x: finalSegX + 200,
+                x: goalCastleX,
                 y: floorY - 95
             };
 
@@ -3334,6 +3810,90 @@
                 }
             });
 
+            // Golden '🧰' Tool Boxes (Instant Power-Up Tools: Fire Flower, Rainbow Star, Extra Life, Super Mushroom)
+            marioToolBoxes.forEach(tb => {
+                if (tb.bounceY < 0) {
+                    tb.bounceY += 1.2;
+                    if (tb.bounceY > 0) tb.bounceY = 0;
+                }
+                if (
+                    mario.x + mario.width > tb.x &&
+                    mario.x < tb.x + tb.w &&
+                    mario.y + mario.height > tb.y &&
+                    mario.y < tb.y + tb.h
+                ) {
+                    const prevBottom = mario.y + mario.height - mario.vy;
+                    const prevTop = mario.y - mario.vy;
+                    if (mario.vy >= 0 && prevBottom <= tb.y + 12) {
+                        mario.grounded = true;
+                        mario.vy = 0;
+                        mario.y = tb.y - mario.height;
+                    } else if (mario.vy < 0 && prevTop >= tb.y + tb.h - 12) {
+                        mario.y = tb.y + tb.h;
+                        mario.vy = 2;
+                        tb.bounceY = -8;
+                        if (!tb.hit) {
+                            tb.hit = true;
+                            playSFX('powerup');
+                            addScore(15);
+                            if (tb.tool === 'fire') {
+                                mario.state = 'fire';
+                                updateMarioDimensions();
+                                spawnMarioPopup(tb.x + 17, tb.y - 10, 'FIRE TOOL 🔥', '#f97316');
+                                speak('fire flower tool!');
+                            } else if (tb.tool === 'star') {
+                                mario.starPowerTimer = 420;
+                                if (mario.state === 'small') mario.state = 'super';
+                                updateMarioDimensions();
+                                spawnMarioPopup(tb.x + 17, tb.y - 10, 'STAR TOOL ⭐', '#facc15');
+                                speak('rainbow star tool!');
+                            } else if (tb.tool === 'life') {
+                                mario.lives = Math.min(9, mario.lives + 1);
+                                spawnMarioPopup(tb.x + 17, tb.y - 10, '+1 LIFE ❤️', '#f43f5e');
+                                speak('extra life!');
+                            } else {
+                                if (mario.state === 'small') mario.state = 'super';
+                                updateMarioDimensions();
+                                spawnMarioPopup(tb.x + 17, tb.y - 10, 'SUPER TOOL 🍄', '#4ade80');
+                                speak('super mushroom tool!');
+                            }
+                            updateMarioHUD();
+                            spawnMarioParticles(tb.x + 17, tb.y, ['#facc15', '#38bdf8', '#4ade80', '#f43f5e'], 14);
+                        } else {
+                            playSFX('coin');
+                        }
+                    } else if (mario.x + mario.width / 2 < tb.x + tb.w / 2) {
+                        mario.x = tb.x - mario.width;
+                        mario.vx = 0;
+                    } else {
+                        mario.x = tb.x + tb.w;
+                        mario.vx = 0;
+                    }
+                }
+            });
+
+            // Bouncy Pinball Bumper Mushrooms
+            marioBumpers.forEach(bmp => {
+                if (bmp.pulse > 0) bmp.pulse--;
+                const mx = mario.x + mario.width / 2;
+                const my = mario.y + mario.height / 2;
+                const dx = mx - bmp.x;
+                const dy = my - bmp.y;
+                const dist = Math.hypot(dx, dy);
+                if (dist < bmp.r + 15) {
+                    const nx = dist > 0 ? dx / dist : 0;
+                    const ny = dist > 0 ? dy / dist : -1;
+                    mario.vx = nx * 8.5;
+                    mario.vy = Math.min(-11.5, ny * 12.5);
+                    mario.grounded = false;
+                    bmp.pulse = 12;
+                    playSFX('spring');
+                    addScore(5);
+                    spawnMarioParticles(bmp.x, bmp.y, ['#f43f5e', '#facc15', '#ffffff'], 8);
+                    spawnMarioPopup(bmp.x, bmp.y - 14, 'BOING! +5', '#f43f5e');
+                }
+            });
+
             // '?' Question Blocks & Brick Blocks
             marioBlocks.forEach(b => {
                 if (b.bounceY < 0) {
@@ -3531,13 +4091,28 @@
                 }
             }
 
-            // Goal Flagpole Victory (Slide Flag + Fireworks + Auto-advance Level 1 -> Level 10)
-            if (!marioFlag.cleared && mario.x + mario.width >= marioFlag.x) {
+            // Clamp Mario at the Castle Entrance so he never runs off the right edge of the level
+            const castleDoorLimit = marioCastle.x + 36;
+            if (mario.x + mario.width > castleDoorLimit) {
+                mario.x = castleDoorLimit - mario.width;
+                mario.vx = 0;
+            }
+
+            // Animate Flagpole Pennant sliding down smoothly when cleared
+            if (marioFlag.cleared && marioFlag.flagSlideY < marioFlag.height - 42) {
+                marioFlag.flagSlideY = Math.min(marioFlag.height - 42, marioFlag.flagSlideY + 4.5);
+            }
+
+            // Goal Flagpole Victory (Generous hitbox covering pole & base pedestal)
+            if (!marioFlag.cleared && mario.x + mario.width >= marioFlag.x - 6 && mario.y + mario.height >= marioFlag.y - 10) {
                 marioFlag.cleared = true;
-                marioFlag.flagSlideY = marioFlag.height - 42;
+                marioFlag.flagSlideY = 6;
+                mario.vx = 0;
+                marioKeys.left = false;
+                marioKeys.right = false;
                 addScore(25);
                 playSFX('fanfare');
-                spawnMarioParticles(marioFlag.x + 12, marioFlag.y + 40, ['#facc15', '#4ade80', '#38bdf8', '#f43f5e'], 22);
+                spawnMarioParticles(marioFlag.x + 12, marioFlag.y + 40, ['#facc15', '#4ade80', '#38bdf8', '#f43f5e'], 24);
                 spawnMarioPopup(marioFlag.x, marioFlag.y, '+25 CLEAR!', '#4ade80');
 
                 if (typeof confetti === 'function') {
@@ -3545,14 +4120,16 @@
                 }
 
                 setTimeout(() => {
+                    if (!marioGameRunning) return;
                     if (typeof currentMarioLevel === 'number' && currentMarioLevel < 10) {
                         const nextLvl = currentMarioLevel + 1;
                         speak("level clear! next stage!");
                         selectMarioLevel(nextLvl);
                     } else {
+                        stopMarioGame();
                         showSummary("stage clear!", "you conquered super mario vocabulary!", "🏰");
                     }
-                }, 1250);
+                }, 1350);
             }
         }
 
@@ -3882,7 +4459,8 @@
             marioCtx.fillStyle = skyGrad;
             marioCtx.fillRect(0, 0, marioCanvas.width, marioCanvas.height);
 
-            const cameraX = Math.max(0, mario.x - 190);
+            const maxCameraX = Math.max(0, (marioCastle.x + 130) - marioCanvas.width);
+            const cameraX = Math.min(maxCameraX, Math.max(0, mario.x - 190));
             marioCtx.save();
             marioCtx.translate(-cameraX, 0);
 
@@ -4057,6 +4635,43 @@
                 marioCtx.fillStyle = '#22c55e';
                 marioCtx.fillRect(pipe.x, pipe.y, pipe.w, 13);
                 marioCtx.strokeRect(pipe.x, pipe.y, pipe.w, 13);
+            });
+
+            // 3A. Golden '🧰' Tool Boxes
+            marioToolBoxes.forEach(tb => {
+                const drawY = tb.y + tb.bounceY;
+                marioCtx.fillStyle = tb.hit ? '#94a3b8' : '#0ea5e9';
+                marioCtx.fillRect(tb.x, drawY, tb.w, tb.h);
+                marioCtx.strokeStyle = tb.hit ? '#475569' : '#0369a1';
+                marioCtx.lineWidth = 2.5;
+                marioCtx.strokeRect(tb.x, drawY, tb.w, tb.h);
+
+                // Gold trim band
+                marioCtx.fillStyle = tb.hit ? '#64748b' : '#facc15';
+                marioCtx.fillRect(tb.x + 2, drawY + 14, tb.w - 4, 5);
+
+                if (!tb.hit) {
+                    const icon = tb.tool === 'fire' ? '🔥' : tb.tool === 'star' ? '⭐' : tb.tool === 'life' ? '❤️' : '🍄';
+                    marioCtx.font = '16px Lexend, sans-serif';
+                    marioCtx.textAlign = 'center';
+                    marioCtx.fillText(icon, tb.x + tb.w / 2, drawY + 23);
+                }
+            });
+
+            // 3B. Bouncy Pinball Bumper Mushrooms
+            marioBumpers.forEach(bmp => {
+                const radius = bmp.r + (bmp.pulse > 0 ? 4 : 0);
+                marioCtx.fillStyle = '#f43f5e';
+                marioCtx.beginPath();
+                marioCtx.arc(bmp.x, bmp.y, radius, 0, Math.PI * 2);
+                marioCtx.fill();
+                marioCtx.strokeStyle = '#ffffff';
+                marioCtx.lineWidth = 3;
+                marioCtx.stroke();
+                marioCtx.fillStyle = '#facc15';
+                marioCtx.beginPath();
+                marioCtx.arc(bmp.x, bmp.y, radius * 0.45, 0, Math.PI * 2);
+                marioCtx.fill();
             });
 
             // 3. '?' Question Blocks & Brick Blocks
@@ -4244,9 +4859,16 @@
             marioCtx.closePath();
             marioCtx.fill();
 
+            // Flagpole Stone Base Pedestal & GOAL Sign
+            marioCtx.fillStyle = '#475569';
+            marioCtx.fillRect(marioFlag.x - 10, marioFlag.y + marioFlag.height - 16, 26, 16);
+            marioCtx.strokeStyle = '#1e293b';
+            marioCtx.lineWidth = 2;
+            marioCtx.strokeRect(marioFlag.x - 10, marioFlag.y + marioFlag.height - 16, 26, 16);
+
             // Flagpole & Pennant
             marioCtx.fillStyle = '#e2e8f0';
-            marioCtx.fillRect(marioFlag.x, marioFlag.y, 6, marioFlag.height);
+            marioCtx.fillRect(marioFlag.x, marioFlag.y, 6, marioFlag.height - 16);
             marioCtx.fillStyle = '#facc15';
             marioCtx.beginPath();
             marioCtx.arc(marioFlag.x + 3, marioFlag.y, 7, 0, Math.PI * 2);
